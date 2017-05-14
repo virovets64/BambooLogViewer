@@ -18,5 +18,13 @@ namespace BambooLogViewer.DataModel
     public string Number { get; set; }
     public string Agent { get; set; }
     public ObservableCollection<PlanTask> Tasks { get; set; }
+
+    public bool Failed
+    {
+      get
+      {
+        return Tasks.Any(x => x.Failed);
+      }
+    }
   }
 }

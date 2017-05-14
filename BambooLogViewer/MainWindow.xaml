@@ -21,6 +21,7 @@
         <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Tasks}">
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
+              <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
               <TextBlock Text="Build: " />
               <TextBlock Text="{Binding Id}" FontWeight="Bold"/>
               <TextBlock Text=" on " />
