@@ -13,7 +13,10 @@ namespace BambooLogViewer.DataModel
       Tasks = new ObservableCollection<PlanTask>();
     }
 
+    public string Id { get; set; }
     public string Name { get; set; }
+    public string Number { get; set; }
+    public string Agent { get; set; }
     public ObservableCollection<PlanTask> Tasks { get; set; }
   }
 }

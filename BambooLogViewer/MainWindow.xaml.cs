@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -24,7 +25,8 @@ namespace BambooLogViewer
     public MainWindow()
     {
       InitializeComponent();
-      trvLog.ItemsSource = createSampleData().Builds;
+//      trvLog.ItemsSource = createSampleData().Builds;
+      trvLog.ItemsSource = loadLogFile().Builds;
     }
 
     BambooLog createSampleData()
@@ -44,5 +46,12 @@ namespace BambooLogViewer
 
       return log;
     }
+
+    BambooLog loadLogFile()
+    {
+      var lines = File.ReadLines(@"c:\Temp\Sample.log");
+      return Parser.BambooLogParser.Parse(lines);
+    }
+     
   }
 }
