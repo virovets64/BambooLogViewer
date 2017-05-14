@@ -1,8 +1,21 @@
 ﻿<Window x:Class="BambooLogViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:self="clr-namespace:BambooLogViewer.DataModel"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
-    </Grid>
+    <TreeView Name="trvLog">
+      <TreeView.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type self:Build}" ItemsSource="{Binding Tasks}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        <DataTemplate DataType="{x:Type self:PlanTask}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </DataTemplate>
+      </TreeView.Resources>
+    </TreeView>
+  </Grid>
 </Window>

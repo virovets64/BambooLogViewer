@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BambooLogViewer.DataModel;
 
 namespace BambooLogViewer
 {
@@ -23,6 +24,25 @@ namespace BambooLogViewer
     public MainWindow()
     {
       InitializeComponent();
+      trvLog.ItemsSource = createSampleData().Builds;
+    }
+
+    BambooLog createSampleData()
+    {
+      var log = new BambooLog();
+      {
+        var build = new Build() { Name = "Build 1" };
+        build.Tasks.Add(new PlanTask() { Name = "Task 11" });
+        build.Tasks.Add(new PlanTask() { Name = "Task 12" });
+        log.Builds.Add(build);
+      }
+      {
+        var build = new Build() { Name = "Build 2" };
+        build.Tasks.Add(new PlanTask() { Name = "Task 21" });
+        log.Builds.Add(build);
+      }
+
+      return log;
     }
   }
 }
