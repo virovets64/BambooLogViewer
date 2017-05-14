@@ -29,65 +29,80 @@ namespace BambooLogViewer.Parser
     private BambooLog log = new BambooLog();
     private Build currentBuild = null;
     private PlanTask currentTask = null;
+    private static Regex regexBuildStarted = new Regex(@"Build (?<Name>.+) - Build #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)");
+    private static Regex regexBuildFinished = new Regex(@"Finished building (?<Id>.+).");
+    private static Regex regexTaskStarted = new Regex(@"Starting task '(?<Name>.+)' of type '(?<Type>.+)'");
+    private static Regex regexTaskFinished = new Regex(@"Finished task '(?<Name>.+)' with result: (?<Result>.+)");
 
     private void run(IEnumerable<string> lines)
     {
       var tabDelimiter = new char[] { '\t' };
-
-      var regexBuildStarted = new Regex(@"Build (?<Name>.+) - Build #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)");
-      var regexBuildFinished = new Regex(@"Finished building (?<Id>.+).");
-      var regexTaskStarted = new Regex(@"Starting task '(?<Name>.+)' of type '(?<Type>.+)'");
-      var regexTaskFinished = new Regex(@"Finished task '(?<Name>.+)' with result: (?<Result>.+)");
 
       foreach (string line in lines)
       {
         var columns = line.Split(tabDelimiter, 3);
         var row = new Row { Kind = columns[0], Time = DateTime.Parse(columns[1]), Message = columns[2] };
 
-        var match = regexBuildStarted.Match(row.Message);
-        if (match.Success)
-        {
-          currentBuild = new Build();
-          setMatchedProperties(currentBuild, match.Groups, regexBuildStarted.GetGroupNames());
-          log.Builds.Add(currentBuild);
+        if (matchBuildStarted(row, regexBuildStarted) ||
+            matchBuildFinished(row, regexBuildFinished) ||
+            matchTaskStarted(row, regexTaskStarted) ||
+            matchTaskFinished(row, regexTaskFinished))
           continue;
-        }
-
-        match = regexBuildFinished.Match(row.Message);
-        if (match.Success)
-        {
-          if (currentBuild == null)
-            throw new Exception("Current build is null");
-          if (currentBuild.Id != match.Groups["Id"].Value)
-            throw new Exception("Build id mismatch");
-          currentBuild = null;
-          continue;
-        }
-
-        match = regexTaskStarted.Match(row.Message);
-        if (match.Success)
-        {
-          currentTask = new PlanTask();
-          setMatchedProperties(currentTask, match.Groups, regexTaskStarted.GetGroupNames());
-          currentBuild.Tasks.Add(currentTask);
-          continue;
-        }
-
-        match = regexTaskFinished.Match(row.Message);
-        if (match.Success)
-        {
-          if (currentTask == null)
-            throw new Exception("Current task is null");
-          if (currentTask.Name != match.Groups["Name"].Value)
-            throw new Exception("Task name mismatch");
-          currentTask.Result = match.Groups["Result"].Value;
-          currentTask = null;
-          continue;
-        }
       }
-
     }
 
+    private bool matchBuildStarted(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        currentBuild = new Build();
+        setMatchedProperties(currentBuild, match.Groups, regex.GetGroupNames());
+        log.Builds.Add(currentBuild);
+      }
+      return match.Success;
+    }
+
+    private bool matchBuildFinished(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        if (currentBuild == null)
+          throw new Exception("Current build is null");
+        if (currentBuild.Id != match.Groups["Id"].Value)
+          throw new Exception("Build id mismatch");
+        currentBuild = null;
+      }
+      return match.Success;
+    }
+
+    private bool matchTaskStarted(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        currentTask = new PlanTask();
+        setMatchedProperties(currentTask, match.Groups, regex.GetGroupNames());
+        currentBuild.Tasks.Add(currentTask);
+      }
+      return match.Success;
+    }
+
+    private bool matchTaskFinished(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        if (currentTask == null)
+          throw new Exception("Current task is null");
+        if (currentTask.Name != match.Groups["Name"].Value)
+          throw new Exception("Task name mismatch");
+        currentTask.Result = match.Groups["Result"].Value;
+        currentTask = null;
+      }
+      return match.Success;
+    }
 
     static void setMatchedProperties(object obj, GroupCollection groups, string[] groupNames)
     {
