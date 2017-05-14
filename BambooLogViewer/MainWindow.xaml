@@ -8,7 +8,14 @@
     <view:MessageColorConverter x:Key="messageColorConverter"></view:MessageColorConverter>
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
   </Window.Resources>
-  <Grid>
+  <StackPanel Orientation="Vertical">
+    <DockPanel>
+      <TextBlock Text="Log file path: " DockPanel.Dock="Left" Margin="4"/>
+      <Button Name="btnOpen" DockPanel.Dock="Right" Margin="4" Click="btnOpen_Click">
+        <TextBlock Text="Open"/>
+      </Button>
+      <TextBox Name="editPath" Margin="4"/>
+    </DockPanel>
     <TreeView Name="trvLog">
       <TreeView.Resources>
         <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Tasks}">
@@ -51,6 +58,6 @@
         </DataTemplate>
       </TreeView.Resources>
     </TreeView>
-  </Grid>
+  </StackPanel>
 
 </Window>

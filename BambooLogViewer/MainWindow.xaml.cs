@@ -25,8 +25,9 @@ namespace BambooLogViewer
     public MainWindow()
     {
       InitializeComponent();
+      editPath.Text = Properties.Settings.Default.LastPath;
 //      trvLog.ItemsSource = createSampleData().Builds;
-      trvLog.ItemsSource = loadLogFile().Builds;
+//      trvLog.ItemsSource = loadLogFile().Builds;
     }
 
     BambooLog createSampleData()
@@ -51,6 +52,16 @@ namespace BambooLogViewer
     {
       var lines = File.ReadLines(@"c:\Temp\Sample.log");
       return Parser.BambooLogParser.Parse(lines);
+    }
+
+    private void btnOpen_Click(object sender, RoutedEventArgs e)
+    {
+//      var lines = File.ReadLines(editPath.Text);
+      Properties.Settings.Default.LastPath = editPath.Text;
+      var lines = Parser.BambooLogParser.downloadFile(editPath.Text);
+      var logFile = Parser.BambooLogParser.Parse(lines);
+      trvLog.ItemsSource = logFile.Builds;
+      Properties.Settings.Default.Save();
     }
      
   }

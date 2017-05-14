@@ -43,6 +43,8 @@ namespace BambooLogViewer.Parser
 
       foreach (string line in lines)
       {
+        if (line.Trim() == "")
+          continue;
         var columns = line.Split(tabDelimiter, 3);
         var row = new Row { Kind = columns[0], Time = DateTime.Parse(columns[1]), Message = columns[2] };
 
