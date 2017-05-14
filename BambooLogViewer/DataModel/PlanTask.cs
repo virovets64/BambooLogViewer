@@ -18,5 +18,13 @@ namespace BambooLogViewer.DataModel
     public string Result { get; set; }
     public Dictionary<string, VSProject> VSProjects { get; set; }
     public ObservableCollection<Record> Records { get; set; }
+
+    public bool Failed
+    {
+      get 
+      {
+        return !Result.Equals("success", StringComparison.InvariantCultureIgnoreCase);
+      }
+    }
   }
 }

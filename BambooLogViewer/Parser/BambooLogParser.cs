@@ -155,11 +155,18 @@ namespace BambooLogViewer.Parser
         var errorMatch = regexError.Match(record.Message);
         if (errorMatch.Success)
         {
-          record.Kind = errorMatch.Groups["Severity"].Value;
-          if (record.Kind == "warning")
-            project.Warnings++;
-          else
-            project.Errors++;
+          switch(errorMatch.Groups["Severity"].Value)
+          {
+            case "warning":
+              record.Severity = MessageSeverity.Warning;
+              project.Warnings++;
+              break;
+            case "error":
+            case "fatal error":
+              record.Severity = MessageSeverity.Error;
+              project.Errors++;
+              break;
+          }
         }
         project.Records.Add(record);
         project.FinishTime = row.Time;

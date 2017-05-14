@@ -6,12 +6,13 @@
         Title="MainWindow" Height="350" Width="525">
   <Window.Resources>
     <view:MessageColorConverter x:Key="messageColorConverter"></view:MessageColorConverter>
+    <BooleanToVisibilityConverter x:Key="BoolToVis" />
   </Window.Resources>
   <Grid>
     <TreeView Name="trvLog">
       <TreeView.Resources>
         <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Tasks}">
-          <StackPanel Orientation="Vertical" Background="#FFE6F9EC" Margin="1">
+          <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
               <TextBlock Text="Build: " />
               <TextBlock Text="{Binding Id}" FontWeight="Bold"/>
@@ -24,18 +25,27 @@
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type data:PlanTask}" ItemsSource="{Binding Records}">
-          <StackPanel Orientation="Horizontal" Background="#FFEAF3F9">
+          <StackPanel Orientation="Horizontal">
+            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Text="Task: " />
             <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+            <TextBlock Text=" Result: " />
+            <TextBlock Text="{Binding Result}" FontWeight="Bold"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type data:VSProject}" ItemsSource="{Binding Records}">
-          <StackPanel Orientation="Horizontal" Background="#FFF2F7E1">
-            <TextBlock Text="{Binding Name}" />
+          <StackPanel Orientation="Horizontal">
+            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Ellipse Width="12" Height="12" Fill="Yellow" Margin="0,0,5,0" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
+            <!--<TextBlock Text="{Binding Warnings}" Width="25" Background="Yellow" Foreground="Black" TextAlignment="Right" Margin="0,0,5,0" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
+            <TextBlock Text="{Binding Errors}" Width="25" Background="Red" Foreground="White" TextAlignment="Right" Margin="0,0,5,0" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>-->
+            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type data:Record}">
-          <StackPanel Orientation="Horizontal" Background="{Binding Kind, Converter={StaticResource messageColorConverter}}">
+          <StackPanel Orientation="Horizontal">
+            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=IsError, Converter={StaticResource BoolToVis}}"/>
+            <Ellipse Width="12" Height="12" Fill="Yellow" Margin="0,0,5,0" Visibility="{Binding Path=IsWarning, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Text="{Binding Message}"/>
           </StackPanel>
         </DataTemplate>

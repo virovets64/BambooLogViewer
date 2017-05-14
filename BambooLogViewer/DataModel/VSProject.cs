@@ -22,5 +22,20 @@ namespace BambooLogViewer.DataModel
     public int Errors { get; set; }
     public int Warnings { get; set; }
     public ObservableCollection<Record> Records { get; set; }
+
+    public bool HasWarnings
+    {
+      get
+      {
+        return Warnings > 0;
+      }
+    }
+    public bool HasErrors
+    {
+      get
+      {
+        return Errors > 0;
+      }
+    }
   }
 }
