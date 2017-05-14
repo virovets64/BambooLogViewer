@@ -63,7 +63,10 @@
     </Compile>
     <Compile Include="DataModel\BambooLog.cs" />
     <Compile Include="DataModel\Build.cs" />
+    <Compile Include="DataModel\GroupRecord.cs" />
     <Compile Include="DataModel\PlanTask.cs" />
+    <Compile Include="DataModel\Record.cs" />
+    <Compile Include="DataModel\VSProject.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

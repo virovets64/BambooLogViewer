@@ -10,9 +10,19 @@
             <TextBlock Text="{Binding Name}" />
           </StackPanel>
         </HierarchicalDataTemplate>
-        <DataTemplate DataType="{x:Type self:PlanTask}">
+        <HierarchicalDataTemplate DataType="{x:Type self:PlanTask}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type self:VSProject}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        <DataTemplate DataType="{x:Type self:Record}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Message}" />
           </StackPanel>
         </DataTemplate>
       </TreeView.Resources>

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BambooLogViewer.DataModel
 {
-  public class Build
+  public class Build: GroupRecord
   {
     public Build()
     {
