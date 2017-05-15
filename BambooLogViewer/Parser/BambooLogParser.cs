@@ -30,7 +30,7 @@ namespace BambooLogViewer.Parser
     private Build currentBuild = null;
     private PlanTask currentTask = null;
     private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) - Build #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
-    private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+).$");
+    private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
     private static Regex regexTaskStarted = new Regex(@"^Starting task '(?<Name>.+)' of type '(?<Type>.+)'$");
     private static Regex regexTaskFinished = new Regex(@"^Finished task '(?<Name>.+)' with result: (?<Result>.+)$");
     private static Regex regexVSProjectStarted = new Regex(@"^(?<Number>\d+)\>-+ (?<Target>Build|Rebuild All) started: Project: (?<Name>[a-zA-Z0-9_.]+), Configuration: (?<Configuration>.+) -+$");
