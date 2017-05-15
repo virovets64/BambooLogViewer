@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:view="clr-namespace:BambooLogViewer.View"
         xmlns:data="clr-namespace:BambooLogViewer.DataModel"  
-        Title="MainWindow" Height="350" Width="525">
+        Title="Bamboo Log Viewer" Height="350" Width="525">
   <Window.Resources>
     <view:MessageColorConverter x:Key="messageColorConverter"></view:MessageColorConverter>
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -26,11 +26,22 @@
   </Window.Resources>
   <DockPanel>
     <DockPanel DockPanel.Dock="Top">
-      <TextBlock Text="Log file path: " DockPanel.Dock="Left" Margin="4"/>
-      <Button Name="btnOpen" DockPanel.Dock="Right" Margin="4" Click="btnOpen_Click">
-        <TextBlock Text="Open"/>
-      </Button>
-      <TextBox Name="editPath" Margin="4"/>
+      <TabControl>
+        <TabItem Header="From File">
+          <DockPanel>
+            <TextBlock Text="Log file path: " DockPanel.Dock="Left" Margin="4"/>
+            <Button Name="btnOpen" DockPanel.Dock="Right" Margin="4" Click="btnOpen_Click">
+              <TextBlock Text="Open"/>
+            </Button>
+            <TextBox Name="editPath" Margin="4"/>
+          </DockPanel>
+        </TabItem>
+        <TabItem Header="From Clipboard">
+          <Button Name="btnPaste" DockPanel.Dock="Right" Margin="4" Click="btnPaste_Click">
+            <TextBlock Text="Paste"/>
+          </Button>
+        </TabItem>
+      </TabControl>
     </DockPanel>
     <TreeView Name="trvLog">
       <TreeView.Resources>

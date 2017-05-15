@@ -36,6 +36,16 @@ namespace BambooLogViewer
       trvLog.ItemsSource = logFile.Builds;
       Properties.Settings.Default.Save();
     }
+
+    private void btnPaste_Click(object sender, RoutedEventArgs e)
+    {
+      string text = Clipboard.GetText();
+      if(!String.IsNullOrEmpty(text))
+      {
+        var logFile = Parser.BambooLogParser.Parse(text.Split('\n'));
+        trvLog.ItemsSource = logFile.Builds;
+      }
+    }
     
   }
 }
