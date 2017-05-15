@@ -7,6 +7,22 @@
   <Window.Resources>
     <view:MessageColorConverter x:Key="messageColorConverter"></view:MessageColorConverter>
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    <Style x:Key="errorLabelStyle">
+      <Setter Property="Label.Background" Value="Red"/>
+      <Setter Property="Label.BorderBrush" Value="Black"/>
+      <Setter Property="Label.BorderThickness" Value="1"/>
+      <Setter Property="Label.Padding" Value="1"/>
+      <Setter Property="Label.Margin" Value="0,0,5,0"/>
+      <Setter Property="Label.Content" Value="   "/>
+    </Style>
+    <Style x:Key="warningLabelStyle">
+      <Setter Property="Label.Background" Value="Yellow"/>
+      <Setter Property="Label.BorderBrush" Value="Black"/>
+      <Setter Property="Label.BorderThickness" Value="1"/>
+      <Setter Property="Label.Padding" Value="1"/>
+      <Setter Property="Label.Margin" Value="0,0,5,0"/>
+      <Setter Property="Label.Content" Value="   "/>
+    </Style>
   </Window.Resources>
   <DockPanel>
     <DockPanel DockPanel.Dock="Top">
@@ -21,7 +37,7 @@
         <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Tasks}">
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-              <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
+              <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
               <TextBlock Text="Build: " />
               <TextBlock Text="{Binding Id}" FontWeight="Bold"/>
               <TextBlock Text=" on " />
@@ -34,7 +50,7 @@
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type data:PlanTask}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
-            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Text="Task: " />
             <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
             <TextBlock Text=" Result: " />
@@ -43,17 +59,15 @@
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type data:VSProject}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
-            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
-            <Ellipse Width="12" Height="12" Fill="Yellow" Margin="0,0,5,0" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
-            <!--<TextBlock Text="{Binding Warnings}" Width="25" Background="Yellow" Foreground="Black" TextAlignment="Right" Margin="0,0,5,0" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
-            <TextBlock Text="{Binding Errors}" Width="25" Background="Red" Foreground="White" TextAlignment="Right" Margin="0,0,5,0" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>-->
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding Errors}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding Warnings}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type data:Record}">
           <StackPanel Orientation="Horizontal">
-            <Ellipse Width="12" Height="12" Fill="Red" Margin="0,0,5,0" Visibility="{Binding Path=IsError, Converter={StaticResource BoolToVis}}"/>
-            <Ellipse Width="12" Height="12" Fill="Yellow" Margin="0,0,5,0" Visibility="{Binding Path=IsWarning, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=IsError, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Visibility="{Binding Path=IsWarning, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Text="{Binding Message}"/>
           </StackPanel>
         </DataTemplate>
