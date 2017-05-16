@@ -34,7 +34,7 @@ namespace BambooLogViewer.Parser
     private BambooLog log = new BambooLog();
     private Build currentBuild = null;
     private PlanTask currentTask = null;
-    private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) - Build #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
+    private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
     private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
     private static Regex regexTaskStarted = new Regex(@"^Starting task '(?<Name>.+)' of type '(?<Type>.+)'$");
     private static Regex regexTaskFinished = new Regex(@"^Finished task '(?<Name>.+)' with result: (?<Result>.+)$");
