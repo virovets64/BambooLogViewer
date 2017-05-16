@@ -11,12 +11,17 @@ namespace BambooLogViewer.Parser
 {
   public class BambooLogParser
   {
-    public static IEnumerable<string> downloadFile(string url)
+    public static string downloadFile(string url)
     {
       using (WebClient client = new WebClient())
       {
-        return client.DownloadString(url).Split('\n');
+        return client.DownloadString(url);
       }
+    }
+
+    public static BambooLog Parse(string text)
+    {
+      return Parse(text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries));
     }
 
     public static BambooLog Parse(IEnumerable<string> lines)

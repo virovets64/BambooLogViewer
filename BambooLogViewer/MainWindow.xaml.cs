@@ -31,8 +31,8 @@ namespace BambooLogViewer
     private void btnOpen_Click(object sender, RoutedEventArgs e)
     {
       Properties.Settings.Default.LastPath = editPath.Text;
-      var lines = Parser.BambooLogParser.downloadFile(editPath.Text);
-      var logFile = Parser.BambooLogParser.Parse(lines);
+      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
+      var logFile = Parser.BambooLogParser.Parse(text);
       trvLog.ItemsSource = logFile.Builds;
       Properties.Settings.Default.Save();
     }
@@ -42,7 +42,7 @@ namespace BambooLogViewer
       string text = Clipboard.GetText();
       if(!String.IsNullOrEmpty(text))
       {
-        var logFile = Parser.BambooLogParser.Parse(text.Split('\n'));
+        var logFile = Parser.BambooLogParser.Parse(text);
         trvLog.ItemsSource = logFile.Builds;
       }
     }
