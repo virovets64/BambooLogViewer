@@ -121,6 +121,15 @@
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type data:GTestCaseParametrized}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="where"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Parameter}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type data:GTest}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
