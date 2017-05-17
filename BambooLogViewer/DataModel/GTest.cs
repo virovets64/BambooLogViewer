@@ -9,6 +9,18 @@ namespace BambooLogViewer.DataModel
   public class GTest: GroupRecord
   {
     public string Name { get; set; }
-    public string Result { get; set; }
+    public string Result
+    {
+      get
+      {
+        return errorCount == 0? "OK" : "FAILED";
+      }
+      set
+      {
+        errorCount = value.Trim() == "OK" ? 0 : 1;
+      }
+    }
+    public override void Update()
+    { }
   }
 }

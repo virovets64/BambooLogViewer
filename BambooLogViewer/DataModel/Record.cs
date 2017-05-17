@@ -33,5 +33,7 @@ namespace BambooLogViewer.DataModel
         return Severity == MessageSeverity.Warning;
       }
     }
+    public virtual void Update()
+    { }
   }
 }

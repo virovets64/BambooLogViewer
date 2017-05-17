@@ -34,7 +34,7 @@ namespace BambooLogViewer
       var text = File.ReadAllText(editPath.Text);
 //      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
       var logFile = Parser.BambooLogParser.Parse(text);
-      trvLog.ItemsSource = logFile.Builds;
+      trvLog.ItemsSource = logFile.Records;
       Properties.Settings.Default.Save();
     }
 
@@ -44,7 +44,7 @@ namespace BambooLogViewer
       if(!String.IsNullOrEmpty(text))
       {
         var logFile = Parser.BambooLogParser.Parse(text);
-        trvLog.ItemsSource = logFile.Builds;
+        trvLog.ItemsSource = logFile.Records;
       }
     }
     

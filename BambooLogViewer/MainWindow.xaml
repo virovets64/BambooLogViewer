@@ -9,6 +9,7 @@
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
     <Style x:Key="errorLabelStyle">
       <Setter Property="Label.Background" Value="Red"/>
+      <Setter Property="Label.Foreground" Value="White"/>
       <Setter Property="Label.BorderBrush" Value="Black"/>
       <Setter Property="Label.BorderThickness" Value="1"/>
       <Setter Property="Label.Padding" Value="1,0,1,0"/>
@@ -65,7 +66,8 @@
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
               <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
-              <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
+              <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+              <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
               <TextBlock Style="{StaticResource keyStyle}" Text="Build: " />
               <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Id}"/>
               <TextBlock Style="{StaticResource keyStyle}" Text="on" />
@@ -79,7 +81,8 @@
         <HierarchicalDataTemplate DataType="{x:Type data:PlanTask}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
-            <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=Failed, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Task:" />
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text=" Result:" />
@@ -89,8 +92,8 @@
         <HierarchicalDataTemplate DataType="{x:Type data:VSProject}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
-            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding Errors}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
-            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding Warnings}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Project:"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Config:"/>
@@ -100,6 +103,8 @@
         <HierarchicalDataTemplate DataType="{x:Type data:GTestRun}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="GTest:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding TestCount}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="tests from"/>
@@ -110,6 +115,8 @@
         <HierarchicalDataTemplate DataType="{x:Type data:GTestCase}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
           </StackPanel>
@@ -117,6 +124,8 @@
         <HierarchicalDataTemplate DataType="{x:Type data:GTest}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <Label Style="{StaticResource errorLabelStyle}" Content="{Binding ErrorCount}" Visibility="{Binding Path=HasErrors, Converter={StaticResource BoolToVis}}"/>
+            <Label Style="{StaticResource warningLabelStyle}" Content="{Binding WarningCount}" Visibility="{Binding Path=HasWarnings, Converter={StaticResource BoolToVis}}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Test:"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Result:"/>

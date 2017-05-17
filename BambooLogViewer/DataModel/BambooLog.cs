@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace BambooLogViewer.DataModel
 {
-  public class BambooLog
+  public class BambooLog: GroupRecord
   {
-    public BambooLog()
-    {
-      Builds = new ObservableCollection<Build>();
-    }
-    public ObservableCollection<Build> Builds { get; set; }
   }
 }
