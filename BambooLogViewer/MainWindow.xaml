@@ -61,7 +61,7 @@
     </DockPanel>
     <TreeView Name="trvLog">
       <TreeView.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Tasks}">
+        <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
               <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>

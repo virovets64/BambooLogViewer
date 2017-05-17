@@ -11,7 +11,6 @@ namespace BambooLogViewer.DataModel
   {
     public VSProject()
     {
-      Records = new ObservableCollection<Record>();
       Errors = 0;
       Warnings = 0;
     }
@@ -21,7 +20,6 @@ namespace BambooLogViewer.DataModel
     public string Configuration { get; set; }
     public int Errors { get; set; }
     public int Warnings { get; set; }
-    public ObservableCollection<Record> Records { get; set; }
 
     public bool HasWarnings
     {

@@ -11,13 +11,11 @@ namespace BambooLogViewer.DataModel
     public PlanTask()
     {
       VSProjects = new Dictionary<string, VSProject>();
-      Records = new ObservableCollection<Record>();
     }
 
     public string Name { get; set; }
     public string Result { get; set; }
     public Dictionary<string, VSProject> VSProjects { get; set; }
-    public ObservableCollection<Record> Records { get; set; }
 
     public bool Failed
     {

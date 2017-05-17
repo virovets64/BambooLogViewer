@@ -8,16 +8,18 @@ namespace BambooLogViewer.DataModel
 {
   public class Build: GroupRecord
   {
-    public Build()
-    {
-      Tasks = new ObservableCollection<PlanTask>();
-    }
-
     public string Id { get; set; }
     public string Name { get; set; }
     public string Number { get; set; }
     public string Agent { get; set; }
-    public ObservableCollection<PlanTask> Tasks { get; set; }
+
+    public IEnumerable<PlanTask> Tasks
+    {
+      get
+      {
+        return Records.Where(x => x is PlanTask).Select(x => (PlanTask)x);
+      }
+    }
 
     public bool Failed
     {

@@ -32,8 +32,9 @@ namespace BambooLogViewer.Parser
     }
 
     private BambooLog log = new BambooLog();
-    private Build currentBuild = null;
-    private PlanTask currentTask = null;
+    private Stack<GroupRecord> groupStack = new Stack<GroupRecord>();
+//    private Build currentBuild = null;
+//    private PlanTask currentTask = null;
     private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
     private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
     private static Regex regexTaskStarted = new Regex(@"^Starting task '(?<Name>.+)' of type '(?<Type>.+)'$");
@@ -41,6 +42,12 @@ namespace BambooLogViewer.Parser
     private static Regex regexVSProjectStarted = new Regex(@"^(?<Number>\d+)\>-+ (?<Target>Build|Rebuild All) started: Project: (?<Name>[a-zA-Z0-9_.]+), Configuration: (?<Configuration>.+) -+$");
     private static Regex regexProjectNumber = new Regex(@"^(?<Number>\d+)\>(?<Message>.*)$");
     private static Regex regexError = new Regex(@"^.+: (?<Severity>warning|error|fatal error) (\w+):");
+    private static Regex regexGTestRunStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
+    private static Regex regexGTestRunFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
+    private static Regex regexGTestCaseStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
+    private static Regex regexGTestCaseFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
+    private static Regex regexGTestStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
+    private static Regex regexGTestFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
 
     private void run(IEnumerable<string> lines)
     {
@@ -58,16 +65,22 @@ namespace BambooLogViewer.Parser
             matchTaskStarted(row, regexTaskStarted) ||
             matchTaskFinished(row, regexTaskFinished) ||
             matchVSProjectStarted(row, regexVSProjectStarted) ||
-            matchVSProjectRecord(row, regexProjectNumber))
+            matchVSProjectRecord(row, regexProjectNumber) ||
+            matchGTestRunStarted(row, regexGTestRunStarted) ||
+            matchGTestRunFinished(row, regexGTestRunFinished) ||
+            matchGTestCaseStarted(row, regexGTestCaseStarted) ||
+            matchGTestCaseFinished(row, regexGTestCaseFinished) ||
+            matchGTestStarted(row, regexGTestStarted) ||
+            matchGTestFinished(row, regexGTestFinished))
           continue;
 
-        if(currentTask != null)
+        if(groupStack.Count != 0)
         {
           var record = new Record();
           record.Kind = row.Kind;
           record.Time = row.Time;
           record.Message = row.Message;
-          currentTask.Records.Add(record);
+          groupStack.Peek().Records.Add(record);
         }
       }
     }
@@ -77,10 +90,13 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        currentBuild = new Build();
-        currentBuild.Time = row.Time;
-        setMatchedProperties(currentBuild, match.Groups, regex.GetGroupNames());
-        log.Builds.Add(currentBuild);
+        if (groupStack.Count > 0)
+          throw new Exception("groupStack.Count > 0");
+        var build = new Build();
+        build.Time = row.Time;
+        setMatchedProperties(build, match.Groups, regex.GetGroupNames());
+        log.Builds.Add(build);
+        groupStack.Push(build);
       }
       return match.Success;
     }
@@ -90,12 +106,15 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        if (currentBuild == null)
-          throw new Exception("Current build is null");
-        if (currentBuild.Id != match.Groups["Id"].Value)
+        while(groupStack.Count > 1)
+        {
+          groupStack.Pop().FinishTime = row.Time;
+        }
+        var build = groupStack.Peek() as Build;
+        if (build.Id != match.Groups["Id"].Value)
           throw new Exception("Build id mismatch");
-        currentBuild.FinishTime = row.Time;
-        currentBuild = null;
+        build.FinishTime = row.Time;
+        groupStack.Pop();
       }
       return match.Success;
     }
@@ -105,10 +124,11 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        currentTask = new PlanTask();
-        currentTask.Time = row.Time;
-        setMatchedProperties(currentTask, match.Groups, regex.GetGroupNames());
-        currentBuild.Tasks.Add(currentTask);
+        var task = new PlanTask();
+        task.Time = row.Time;
+        setMatchedProperties(task, match.Groups, regex.GetGroupNames());
+        groupStack.Peek().Records.Add(task);
+        groupStack.Push(task);
       }
       return match.Success;
     }
@@ -118,13 +138,12 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        if (currentTask == null)
-          throw new Exception("Current task is null");
-        if (currentTask.Name != match.Groups["Name"].Value)
+        var task = groupStack.Peek() as PlanTask;
+        if (task.Name != match.Groups["Name"].Value)
           throw new Exception("Task name mismatch");
-        currentTask.FinishTime = row.Time;
-        currentTask.Result = match.Groups["Result"].Value;
-        currentTask = null;
+        task.FinishTime = row.Time;
+        task.Result = match.Groups["Result"].Value;
+        groupStack.Pop();
       }
       return match.Success;
     }
@@ -134,20 +153,22 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        if (currentTask == null)
-          throw new Exception("Current task is null");
+        var task = groupStack.Peek() as PlanTask;
         var project = new VSProject();
         project.Time = row.Time;
         setMatchedProperties(project, match.Groups, regex.GetGroupNames());
-        currentTask.VSProjects.Add(project.Number, project);
-        currentTask.Records.Add(project);
+        task.VSProjects.Add(project.Number, project);
+        task.Records.Add(project);
       }
       return match.Success;
     }
 
     private bool matchVSProjectRecord(Row row, Regex regex)
     {
-      if (currentTask == null)
+      if(groupStack.Count == 0)
+        return false;
+      var task = groupStack.Peek() as PlanTask;
+      if (task == null)
         return false;
 
       var match = regex.Match(row.Message);
@@ -158,7 +179,7 @@ namespace BambooLogViewer.Parser
         record.Time = row.Time;
         record.Message = match.Groups["Message"].Value;
         var projectNumber = match.Groups["Number"].Value;
-        var project = currentTask.VSProjects[projectNumber];
+        var project = task.VSProjects[projectNumber];
         var errorMatch = regexError.Match(record.Message);
         if (errorMatch.Success)
         {
@@ -180,6 +201,65 @@ namespace BambooLogViewer.Parser
       }
       return match.Success;
     }
+
+    private bool matchGTestRunStarted(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        var task = groupStack.Peek() as PlanTask;
+        var test = new GTestRun();
+        test.Time = row.Time;
+        setMatchedProperties(test, match.Groups, regex.GetGroupNames());
+        task.Records.Add(test);
+        groupStack.Push(task);
+      }
+      return match.Success;
+    }
+    private bool matchGTestRunFinished(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+        var test = groupStack.Peek() as GTestRun;
+        test.FinishTime = row.Time;
+        groupStack.Pop();
+      }
+      return match.Success;
+    }
+    private bool matchGTestCaseStarted(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+      }
+      return match.Success;
+    }
+    private bool matchGTestCaseFinished(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+      }
+      return match.Success;
+    }
+    private bool matchGTestStarted(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+      }
+      return match.Success;
+    }
+    private bool matchGTestFinished(Row row, Regex regex)
+    {
+      var match = regex.Match(row.Message);
+      if (match.Success)
+      {
+      }
+      return match.Success;
+    }
+
 
     static void setMatchedProperties(object obj, GroupCollection groups, string[] groupNames)
     {
