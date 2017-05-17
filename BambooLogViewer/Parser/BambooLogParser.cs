@@ -33,8 +33,7 @@ namespace BambooLogViewer.Parser
 
     private BambooLog log = new BambooLog();
     private Stack<GroupRecord> groupStack = new Stack<GroupRecord>();
-//    private Build currentBuild = null;
-//    private PlanTask currentTask = null;
+
     private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
     private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
     private static Regex regexTaskStarted = new Regex(@"^Starting task '(?<Name>.+)' of type '(?<Type>.+)'$");
@@ -42,12 +41,12 @@ namespace BambooLogViewer.Parser
     private static Regex regexVSProjectStarted = new Regex(@"^(?<Number>\d+)\>-+ (?<Target>Build|Rebuild All) started: Project: (?<Name>[a-zA-Z0-9_.]+), Configuration: (?<Configuration>.+) -+$");
     private static Regex regexProjectNumber = new Regex(@"^(?<Number>\d+)\>(?<Message>.*)$");
     private static Regex regexError = new Regex(@"^.+: (?<Severity>warning|error|fatal error) (\w+):");
-    private static Regex regexGTestRunStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
-    private static Regex regexGTestRunFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
-    private static Regex regexGTestCaseStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
-    private static Regex regexGTestCaseFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
-    private static Regex regexGTestStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases.$");
-    private static Regex regexGTestFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests from (?<CaseCount>\d+) test cases ran. \((?<Milliseconds>\d+\) ms total)$");
+    private static Regex regexGTestRunStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) test[s|] from (?<CaseCount>\d+) test cases?.$");
+    private static Regex regexGTestRunFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests? from (?<CaseCount>\d+) test cases? ran. \((?<Milliseconds>\d+) ms total\)$");
+    private static Regex regexGTestCaseStarted = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*)$");
+    private static Regex regexGTestCaseFinished = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*) \((?<Milliseconds>\d+) ms total\)$");
+    private static Regex regexGTestStarted = new Regex(@"^\[ RUN      \] (?<CaseName>_\w+|[\w-[0-9_]]\w*).(?<Name>_\w+|[\w-[0-9_]]\w*)$");
+    private static Regex regexGTestFinished = new Regex(@"\[       (?<Result>OK|FAILED) \] (?<CaseName>_\w+|[\w-[0-9_]]\w*).(?<Name>_\w+|[\w-[0-9_]]\w*) \((?<Milliseconds>\d+) ms\)$");
 
     private void run(IEnumerable<string> lines)
     {
@@ -212,10 +211,11 @@ namespace BambooLogViewer.Parser
         test.Time = row.Time;
         setMatchedProperties(test, match.Groups, regex.GetGroupNames());
         task.Records.Add(test);
-        groupStack.Push(task);
+        groupStack.Push(test);
       }
       return match.Success;
     }
+
     private bool matchGTestRunFinished(Row row, Regex regex)
     {
       var match = regex.Match(row.Message);
@@ -227,35 +227,56 @@ namespace BambooLogViewer.Parser
       }
       return match.Success;
     }
+    
     private bool matchGTestCaseStarted(Row row, Regex regex)
     {
       var match = regex.Match(row.Message);
       if (match.Success)
       {
+        var test = new GTestCase();
+        test.Time = row.Time;
+        setMatchedProperties(test, match.Groups, regex.GetGroupNames());
+        groupStack.Peek().Records.Add(test);
+        groupStack.Push(test);
       }
       return match.Success;
     }
+
     private bool matchGTestCaseFinished(Row row, Regex regex)
     {
       var match = regex.Match(row.Message);
       if (match.Success)
       {
+        var test = groupStack.Peek() as GTestCase;
+        test.FinishTime = row.Time;
+        groupStack.Pop();
       }
       return match.Success;
     }
+
     private bool matchGTestStarted(Row row, Regex regex)
     {
       var match = regex.Match(row.Message);
       if (match.Success)
       {
+        var test = new GTest();
+        test.Time = row.Time;
+        setMatchedProperties(test, match.Groups, regex.GetGroupNames());
+        groupStack.Peek().Records.Add(test);
+        groupStack.Push(test);
       }
       return match.Success;
     }
+
     private bool matchGTestFinished(Row row, Regex regex)
     {
       var match = regex.Match(row.Message);
       if (match.Success)
       {
+        var test = groupStack.Peek() as GTest;
+        test.FinishTime = row.Time;
+        test.Result = match.Groups["Result"].Value;
+        groupStack.Pop();
       }
       return match.Success;
     }

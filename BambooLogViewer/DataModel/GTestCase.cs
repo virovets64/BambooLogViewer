@@ -8,5 +8,6 @@ namespace BambooLogViewer.DataModel
 {
   public class GTestCase: GroupRecord
   {
-  }
+    public string Name { get; set; }
+ }
 }

@@ -97,6 +97,32 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Configuration}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type data:GTestRun}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="GTest:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding TestCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="tests from"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding CaseCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="cases"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type data:GTestCase}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type data:GTest}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource durationStyle}" Text="{Binding Duration}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Test:"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Result:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type data:Record}">
           <StackPanel Orientation="Horizontal">
             <Label Style="{StaticResource errorLabelStyle}" Visibility="{Binding Path=IsError, Converter={StaticResource BoolToVis}}"/>

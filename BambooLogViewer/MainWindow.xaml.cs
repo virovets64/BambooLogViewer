@@ -31,7 +31,8 @@ namespace BambooLogViewer
     private void btnOpen_Click(object sender, RoutedEventArgs e)
     {
       Properties.Settings.Default.LastPath = editPath.Text;
-      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
+      var text = File.ReadAllText(editPath.Text);
+//      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
       var logFile = Parser.BambooLogParser.Parse(text);
       trvLog.ItemsSource = logFile.Builds;
       Properties.Settings.Default.Save();
