@@ -19,6 +19,15 @@ namespace BambooLogViewer.DataModel
       }
     }
     public TimeSpan Duration { get; set; }
+    
+    public double RelativeDuration
+    {
+      get
+      {
+        return relativeDiration;
+      }
+      set { }
+    }
     public DateTime FinishTime 
     { 
       get
@@ -69,6 +78,7 @@ namespace BambooLogViewer.DataModel
     {
       errorCount = 0;
       warningCount = 0;
+      TimeSpan maxChildDuration = TimeSpan.Zero;
       foreach(var record in Records)
       {
         record.Update();
@@ -77,6 +87,8 @@ namespace BambooLogViewer.DataModel
         {
           errorCount += group.errorCount;
           warningCount += group.warningCount;
+          if (group.Duration > maxChildDuration)
+            maxChildDuration = group.Duration;
         }
         else
         {
@@ -86,10 +98,20 @@ namespace BambooLogViewer.DataModel
             warningCount++;
         }
       }
+      if(maxChildDuration != TimeSpan.Zero)
+      {
+        foreach (var record in Records)
+        {
+          var group = record as GroupRecord;
+          if (group != null)
+            group.relativeDiration = (double)group.Duration.Ticks / maxChildDuration.Ticks;
+        }
+      }
     }
 
     private ObservableCollection<Record> records;
     protected int errorCount = 0;
     protected int warningCount = 0;
+    private double relativeDiration = 0;
   }
 }
