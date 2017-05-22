@@ -65,7 +65,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters.cs" />
+    <Compile Include="ViewModel\Converters.cs" />
     <Compile Include="DataModel\BambooLog.cs" />
     <Compile Include="DataModel\Build.cs" />
     <Compile Include="DataModel\GroupRecord.cs" />

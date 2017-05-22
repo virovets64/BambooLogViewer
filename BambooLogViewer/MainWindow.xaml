@@ -1,46 +1,34 @@
 ﻿<Window x:Class="BambooLogViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:view="clr-namespace:BambooLogViewer.View"
+        xmlns:view="clr-namespace:BambooLogViewer.ViewModel"
         xmlns:data="clr-namespace:BambooLogViewer.DataModel"  
         Title="Bamboo Log Viewer" Height="350" Width="525">
   <Window.Resources>
+    <view:SeverityToColorConverter x:Key="severityToColorConverter"></view:SeverityToColorConverter>
+    <view:SeverityToVisibilityConverter x:Key="severityToVisibilityConverter"></view:SeverityToVisibilityConverter>
+    <view:CountToVisibilityConverter x:Key="countToVisibilityConverter"></view:CountToVisibilityConverter>
     <ControlTemplate x:Key="groupRecordTemplate">
       <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
         <Grid Name="duration">
           <ProgressBar Minimum="0" Maximum="1" Value="{Binding RelativeDuration}"/>
           <TextBlock Foreground="Black" Margin="3,1,3,1" Text="{Binding Duration}"/>
         </Grid>
-        <Grid Name="errorCount">
+        <Grid Visibility="{Binding Path=ErrorCount, Converter={StaticResource countToVisibilityConverter}}">
           <Rectangle Fill="Red" Stroke="Black" StrokeThickness="1" Margin="0" RadiusX="3" RadiusY="3"/>
           <TextBlock Foreground="White" Text="{Binding ErrorCount}" Margin="3,1,3,1"/>
         </Grid>
-        <Grid Name="warningCount">
+        <Grid Visibility="{Binding Path=WarningCount, Converter={StaticResource countToVisibilityConverter}}">
           <Rectangle Fill="Yellow" Stroke="Black" StrokeThickness="1" Margin="0" RadiusX="3" RadiusY="3"/>
           <TextBlock Foreground="Black" Text="{Binding WarningCount}" Margin="3,1,3,1"/>
         </Grid>
       </StackPanel>
-      <ControlTemplate.Triggers>
-        <DataTrigger Binding="{Binding HasErrors}" Value="false">
-          <Setter TargetName="errorCount" Property="Visibility" Value="Hidden"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding HasWarnings}" Value="false">
-          <Setter TargetName="warningCount" Property="Visibility" Value="Hidden"/>
-        </DataTrigger>
-      </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="recordTemplate">
-      <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" Visibility="Hidden" Margin="0,0,5,0"/>
-      <ControlTemplate.Triggers>
-        <DataTrigger Binding="{Binding IsError}" Value="true">
-          <Setter TargetName="ellipse" Property="Fill" Value="Red"/>
-          <Setter TargetName="ellipse" Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding IsWarning}" Value="true">
-          <Setter TargetName="ellipse" Property="Fill" Value="Yellow"/>
-          <Setter TargetName="ellipse" Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </ControlTemplate.Triggers>
+      <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" 
+               Fill="{Binding Path=Severity, Converter={StaticResource severityToColorConverter}}" 
+               Visibility="{Binding Path=Severity, Converter={StaticResource severityToVisibilityConverter}}" 
+               Margin="0,0,5,0"/>
     </ControlTemplate>
     <Style x:Key="keyStyle">
       <Setter Property="TextBox.Margin" Value="0,0,3,0"/>

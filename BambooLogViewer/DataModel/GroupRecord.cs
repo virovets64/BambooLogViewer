@@ -53,21 +53,6 @@ namespace BambooLogViewer.DataModel
         return warningCount;
       }
     }
-    public bool HasWarnings
-    {
-      get
-      {
-        return warningCount > 0;
-      }
-    }
-    public bool HasErrors
-    {
-      get
-      {
-        return errorCount > 0;
-      }
-    }
-
 
     public void Add(Record record)
     {

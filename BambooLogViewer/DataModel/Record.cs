@@ -17,22 +17,8 @@ namespace BambooLogViewer.DataModel
     public string Kind { get; set; }
     public DateTime Time { get; set; }
     public string Message { get; set; }
-    public MessageSeverity Severity;
+    public MessageSeverity Severity { get; set; }
 
-    public bool IsError
-    {
-      get
-      {
-        return Severity == MessageSeverity.Error;
-      }
-    }
-    public bool IsWarning
-    {
-      get
-      {
-        return Severity == MessageSeverity.Warning;
-      }
-    }
     public virtual void Update()
     { }
   }
