@@ -1,13 +1,13 @@
 ﻿<Window x:Class="BambooLogViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:view="clr-namespace:BambooLogViewer.ViewModel"
-        xmlns:data="clr-namespace:BambooLogViewer.DataModel"  
+        xmlns:viewModel="clr-namespace:BambooLogViewer.ViewModel"
+        xmlns:model="clr-namespace:BambooLogViewer.Model"  
         Title="Bamboo Log Viewer" Height="350" Width="525">
   <Window.Resources>
-    <view:SeverityToColorConverter x:Key="severityToColorConverter"></view:SeverityToColorConverter>
-    <view:SeverityToVisibilityConverter x:Key="severityToVisibilityConverter"></view:SeverityToVisibilityConverter>
-    <view:CountToVisibilityConverter x:Key="countToVisibilityConverter"></view:CountToVisibilityConverter>
+    <viewModel:SeverityToColorConverter x:Key="severityToColorConverter"></viewModel:SeverityToColorConverter>
+    <viewModel:SeverityToVisibilityConverter x:Key="severityToVisibilityConverter"></viewModel:SeverityToVisibilityConverter>
+    <viewModel:CountToVisibilityConverter x:Key="countToVisibilityConverter"></viewModel:CountToVisibilityConverter>
     <ControlTemplate x:Key="groupRecordTemplate">
       <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
         <Grid Name="duration">
@@ -64,7 +64,7 @@
     </DockPanel>
     <TreeView Name="trvLog">
       <TreeView.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type data:Build}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:Build}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
               <Control Template="{StaticResource groupRecordTemplate}"></Control>
@@ -78,7 +78,7 @@
             </StackPanel>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:PlanTask}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:PlanTask}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="Task:" />
@@ -87,7 +87,7 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:VSProject}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:VSProject}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="Project:"/>
@@ -96,7 +96,7 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Configuration}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:GTestRun}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:GTestRun}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="GTest:"/>
@@ -106,21 +106,21 @@
             <TextBlock Style="{StaticResource keyStyle}" Text="cases"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:GTestCase}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:GTestCase}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:GTestCaseParametrized}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:GTestCaseParametrized}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="where"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Parameter}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type data:GTest}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type model:GTest}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="Test:"/>
@@ -129,7 +129,7 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <DataTemplate DataType="{x:Type data:Record}">
+        <DataTemplate DataType="{x:Type model:Record}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource recordTemplate}"></Control>
             <TextBlock Text="{Binding Message}"/>

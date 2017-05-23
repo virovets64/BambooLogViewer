@@ -53,9 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataModel\GTest.cs" />
-    <Compile Include="DataModel\GTestCase.cs" />
-    <Compile Include="DataModel\GTestRun.cs" />
+    <Compile Include="Model\GTest.cs" />
+    <Compile Include="Model\GTestCase.cs" />
+    <Compile Include="Model\GTestRun.cs" />
     <Compile Include="Settings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -66,12 +66,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModel\Converters.cs" />
-    <Compile Include="DataModel\BambooLog.cs" />
-    <Compile Include="DataModel\Build.cs" />
-    <Compile Include="DataModel\GroupRecord.cs" />
-    <Compile Include="DataModel\PlanTask.cs" />
-    <Compile Include="DataModel\Record.cs" />
-    <Compile Include="DataModel\VSProject.cs" />
+    <Compile Include="Model\BambooLog.cs" />
+    <Compile Include="Model\Build.cs" />
+    <Compile Include="Model\GroupRecord.cs" />
+    <Compile Include="Model\PlanTask.cs" />
+    <Compile Include="Model\Record.cs" />
+    <Compile Include="Model\VSProject.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

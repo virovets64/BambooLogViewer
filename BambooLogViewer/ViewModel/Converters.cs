@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 using System.Windows.Media;
-using BambooLogViewer.DataModel;
+using BambooLogViewer.Model;
 using System.Windows;
 
 namespace BambooLogViewer.ViewModel

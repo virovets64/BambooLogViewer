@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BambooLogViewer.DataModel
+namespace BambooLogViewer.Model
 {
   public enum MessageSeverity { Normal, Warning, Error };
 

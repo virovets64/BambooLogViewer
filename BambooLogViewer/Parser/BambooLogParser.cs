@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BambooLogViewer.DataModel;
+using BambooLogViewer.Model;
 using System.Net;
 using System.Text.RegularExpressions;
 

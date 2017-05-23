@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace BambooLogViewer.DataModel
+namespace BambooLogViewer.Model
 {
   public class PlanTask : GroupRecord
   {
