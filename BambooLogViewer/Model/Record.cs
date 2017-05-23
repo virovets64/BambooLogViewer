@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BambooLogViewer.Model
 {
@@ -18,8 +17,5 @@ namespace BambooLogViewer.Model
     public DateTime Time { get; set; }
     public string Message { get; set; }
     public MessageSeverity Severity { get; set; }
-
-    public virtual void Update()
-    { }
   }
 }

@@ -33,7 +33,6 @@ namespace BambooLogViewer.Parser
 
     private BambooLog log = new BambooLog();
     private Stack<GroupRecord> groupStack = new Stack<GroupRecord>();
-    private GTestCase lastTestGroup = null;
 
     private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
     private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
@@ -89,7 +88,6 @@ namespace BambooLogViewer.Parser
           groupStack.Peek().Add(record);
         }
       }
-      log.Update();
     }
 
     private bool matchBuildStarted(Row row, Regex regex)
@@ -268,16 +266,7 @@ namespace BambooLogViewer.Parser
         var test = new GTestCaseParametrized();
         test.Time = row.Time;
         setMatchedProperties(test, match.Groups, regex.GetGroupNames());
-        if(lastTestGroup == null || lastTestGroup.Name != test.Name)
-        {
-          lastTestGroup = new GTestCase();
-          lastTestGroup.Time = row.Time;
-          setMatchedProperties(lastTestGroup, match.Groups, regex.GetGroupNames());
-          groupStack.Peek().Add(lastTestGroup);
-        }
-         
-        lastTestGroup.Add(test);
-        groupStack.Push(lastTestGroup);
+        groupStack.Peek().Add(test);
         groupStack.Push(test);
       }
       return match.Success;
@@ -290,7 +279,6 @@ namespace BambooLogViewer.Parser
       {
         var test = groupStack.Peek() as GTestCaseParametrized;
         test.FinishTime = row.Time;
-        groupStack.Pop();
         groupStack.Pop();
       }
       return match.Success;

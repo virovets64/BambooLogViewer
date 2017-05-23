@@ -56,7 +56,17 @@
     <Compile Include="Model\GTest.cs" />
     <Compile Include="Model\GTestCase.cs" />
     <Compile Include="Model\GTestRun.cs" />
+    <Compile Include="Model\TypeMap.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModel\BambooLog.cs" />
+    <Compile Include="ViewModel\Build.cs" />
+    <Compile Include="ViewModel\GroupRecord.cs" />
+    <Compile Include="ViewModel\GTest.cs" />
+    <Compile Include="ViewModel\GTestCase.cs" />
+    <Compile Include="ViewModel\GTestRun.cs" />
+    <Compile Include="ViewModel\PlanTask.cs" />
+    <Compile Include="ViewModel\Record.cs" />
+    <Compile Include="ViewModel\VSProject.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,7 +75,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModel\Converters.cs" />
     <Compile Include="Model\BambooLog.cs" />
     <Compile Include="Model\Build.cs" />
     <Compile Include="Model\GroupRecord.cs" />

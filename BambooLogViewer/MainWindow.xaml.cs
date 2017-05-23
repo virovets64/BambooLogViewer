@@ -24,6 +24,7 @@ namespace BambooLogViewer
   {
     public MainWindow()
     {
+      Model.TypeMap.Initialize();
       InitializeComponent();
       editPath.Text = Properties.Settings.Default.LastPath;
     }
@@ -34,7 +35,8 @@ namespace BambooLogViewer
       var text = File.ReadAllText(editPath.Text);
 //      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
       var logFile = Parser.BambooLogParser.Parse(text);
-      trvLog.ItemsSource = logFile.Records;
+      var logFileView = new ViewModel.BambooLog(logFile);
+      trvLog.ItemsSource = logFileView.Records;
       Properties.Settings.Default.Save();
     }
 
