@@ -10,7 +10,13 @@ namespace BambooLogViewer.ViewModel
   {
     public BambooLog(Model.BambooLog record): base(record)
     {
-      Update();
+      var context = new Context();
+      Update(context);
+    }
+
+    public class Context
+    {
+      public bool FirstErrorFound = false;
     }
   }
 }

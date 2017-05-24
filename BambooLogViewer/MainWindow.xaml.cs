@@ -33,10 +33,7 @@ namespace BambooLogViewer
     {
       Properties.Settings.Default.LastPath = editPath.Text;
       var text = File.ReadAllText(editPath.Text);
-//      var text = Parser.BambooLogParser.downloadFile(editPath.Text);
-      var logFile = Parser.BambooLogParser.Parse(text);
-      var logFileView = new ViewModel.BambooLog(logFile);
-      trvLog.ItemsSource = logFileView.Records;
+      initializeFromString(text);
       Properties.Settings.Default.Save();
     }
 
@@ -45,10 +42,16 @@ namespace BambooLogViewer
       string text = Clipboard.GetText();
       if(!String.IsNullOrEmpty(text))
       {
-        var logFile = Parser.BambooLogParser.Parse(text);
-        trvLog.ItemsSource = logFile.Records;
+        initializeFromString(text);
       }
     }
-    
+
+    private void initializeFromString(string text)
+    {
+      var logFile = Parser.BambooLogParser.Parse(text);
+      var logFileView = new ViewModel.BambooLog(logFile);
+      trvLog.ItemsSource = logFileView.Records;
+      trvLog.Focus();
+    }
   }
 }

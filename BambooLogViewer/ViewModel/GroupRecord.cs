@@ -60,16 +60,19 @@ namespace BambooLogViewer.ViewModel
     }
 
 
-    public override void Update()
+    public override void Update(BambooLog.Context context)
     {
       records = model.Records.Select(x => createViewModel(x)).ToList();
 
       childErrorCount = 0;
       childWarningCount = 0;
       TimeSpan maxChildDuration = TimeSpan.Zero;
+
+      bool firstErrorFound = context.FirstErrorFound;
+
       foreach (var record in Records)
       {
-        record.Update();
+        record.Update(context);
         childErrorCount += record.getErrorCount();
         childWarningCount += record.getWarningCount();
         var group = record as GroupRecord;
@@ -88,6 +91,13 @@ namespace BambooLogViewer.ViewModel
             group.relativeDiration = (double)group.Duration.Ticks / maxChildDuration.Ticks;
         }
       }
+      if (!firstErrorFound && childErrorCount > 0)
+      {
+        IsExpanded = true;
+      }
     }
+
+    public bool IsExpanded { get { return isExpanded; } set { isExpanded = value; } }
+    private bool isExpanded = false;
   }
 }

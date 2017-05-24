@@ -10,7 +10,9 @@ namespace BambooLogViewer.ViewModel
   public class Build: GroupRecord
   {
     public Build(Model.Build record): base(record)
-    { }
+    {
+      IsExpanded = true;
+    }
     private Model.Build model { get { return (Model.Build)modelRecord; }}
 
     public string Id { get { return model.Id; } }

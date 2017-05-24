@@ -17,8 +17,9 @@ namespace BambooLogViewer.ViewModel
     public DateTime Time { get { return modelRecord.Time; } }
     public string Message { get { return modelRecord.Message; } }
 
-    public virtual void Update()
+    public virtual void Update(BambooLog.Context context)
     { }
+
     public virtual int getWarningCount()
     {
       return 0;

@@ -137,6 +137,12 @@
           </StackPanel>
         </DataTemplate>
       </TreeView.Resources>
+      <TreeView.ItemContainerStyle>
+        <Style TargetType="TreeViewItem">
+          <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+          <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+        </Style>
+      </TreeView.ItemContainerStyle>
     </TreeView>
   </DockPanel>
 

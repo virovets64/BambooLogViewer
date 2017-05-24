@@ -41,6 +41,9 @@ namespace BambooLogViewer.ViewModel
       }
     }
 
+    public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
+    private bool isSelected = false;
+    
     public override int getWarningCount()
     {
       return Severity == Model.MessageSeverity.Warning? 1 : 0;
@@ -48,6 +51,15 @@ namespace BambooLogViewer.ViewModel
     public override int getErrorCount()
     {
       return Severity == Model.MessageSeverity.Error ? 1 : 0;
+    }
+
+    public override void Update(BambooLog.Context context)
+    { 
+      if(!context.FirstErrorFound && Severity == Model.MessageSeverity.Error)
+      {
+        context.FirstErrorFound = true;
+        IsSelected = true;
+      }
     }
 
   }
