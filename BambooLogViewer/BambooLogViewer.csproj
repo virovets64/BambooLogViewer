@@ -56,6 +56,7 @@
     <Compile Include="Model\GTest.cs" />
     <Compile Include="Model\GTestCase.cs" />
     <Compile Include="Model\GTestRun.cs" />
+    <Compile Include="Model\SimpleRecord.cs" />
     <Compile Include="Model\TypeMap.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BambooLog.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="ViewModel\GTestRun.cs" />
     <Compile Include="ViewModel\PlanTask.cs" />
     <Compile Include="ViewModel\Record.cs" />
+    <Compile Include="ViewModel\SimpleRecord.cs" />
     <Compile Include="ViewModel\VSProject.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

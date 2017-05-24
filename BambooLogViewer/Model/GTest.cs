@@ -13,11 +13,11 @@ namespace BambooLogViewer.Model
     {
       get
       {
-        return Severity == MessageSeverity.Normal? "OK" : "FAILED";
+        return Failed? "FAILED" : "OK";
       }
       set
       {
-        Severity = value.Trim() == "OK" ? MessageSeverity.Normal : MessageSeverity.Error;
+        Failed = value.Trim() != "OK";
       }
     }
   }

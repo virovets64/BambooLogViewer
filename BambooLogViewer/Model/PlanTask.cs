@@ -13,15 +13,17 @@ namespace BambooLogViewer.Model
     }
 
     public string Name { get; set; }
-    public string Result { get; set; }
-    public Dictionary<string, VSProject> VSProjects { get; set; }
-
-    public bool Failed
+    public string Result
     {
-      get 
+      get
       {
-        return !Result.Equals("success", StringComparison.InvariantCultureIgnoreCase);
+        return Failed ? "fail" : "success";
+      }
+      set
+      {
+        Failed = value.Trim() != "success";
       }
     }
+    public Dictionary<string, VSProject> VSProjects { get; set; }
   }
 }

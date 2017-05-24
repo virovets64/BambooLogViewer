@@ -62,9 +62,11 @@ namespace BambooLogViewer.ViewModel
         }
         else
         {
-          if (record.Severity == Model.MessageSeverity.Error)
+          var simple = record as SimpleRecord;
+          if (simple != null)
+            if (simple.Severity == Model.MessageSeverity.Error)
             errorCount++;
-          if (record.Severity == Model.MessageSeverity.Warning)
+          if (simple.Severity == Model.MessageSeverity.Warning)
             warningCount++;
         }
       }

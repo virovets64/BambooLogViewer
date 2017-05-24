@@ -126,7 +126,7 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:Record}">
+        <DataTemplate DataType="{x:Type viewModel:SimpleRecord}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource recordTemplate}"></Control>
             <TextBlock Text="{Binding Message}"/>

@@ -81,7 +81,7 @@ namespace BambooLogViewer.Parser
 
         if(groupStack.Count != 0)
         {
-          var record = new Record();
+          var record = new SimpleRecord();
           record.Kind = row.Kind;
           record.Time = row.Time;
           record.Message = row.Message;
@@ -179,7 +179,7 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        var record = new Record();
+        var record = new SimpleRecord();
         record.Kind = row.Kind;
         record.Time = row.Time;
         record.Message = match.Groups["Message"].Value;

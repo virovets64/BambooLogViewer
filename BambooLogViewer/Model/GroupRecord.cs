@@ -17,6 +17,7 @@ namespace BambooLogViewer.Model
         return records;
       }
     }
+    public bool Failed { get; set; }
     public TimeSpan Duration { get; set; }
     
     public DateTime FinishTime 
