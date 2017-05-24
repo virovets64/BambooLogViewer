@@ -19,6 +19,14 @@ namespace BambooLogViewer.ViewModel
 
     public virtual void Update()
     { }
+    public virtual int getWarningCount()
+    {
+      return 0;
+    }
+    public virtual int getErrorCount()
+    {
+      return 0;
+    }
 
     public static Record createViewModel(Model.Record modelRecord)
     {

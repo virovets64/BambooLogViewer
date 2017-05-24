@@ -21,7 +21,7 @@ namespace BambooLogViewer.Model
       }
       set
       {
-        Failed = value.Trim() != "success";
+        Failed = value.Trim().ToLower() != "success";
       }
     }
     public Dictionary<string, VSProject> VSProjects { get; set; }

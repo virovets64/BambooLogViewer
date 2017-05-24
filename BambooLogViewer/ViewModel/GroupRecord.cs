@@ -17,20 +17,20 @@ namespace BambooLogViewer.ViewModel
     public List<Record> Records { get { return records; }}
     private List<Record> records = new List<Record>();
     private Model.GroupRecord model { get { return (Model.GroupRecord)modelRecord;  } }
-    protected int errorCount = 0;
-    protected int warningCount = 0;
+    protected int childErrorCount = 0;
+    protected int childWarningCount = 0;
     private double relativeDiration = 0;
 
     public TimeSpan Duration { get { return model.Duration; } }
     public double RelativeDuration { get { return relativeDiration; } set { } }
-    public int ErrorCount { get { return errorCount; } }
-    public int WarningCount { get { return warningCount; } }
+    public int ChildErrorCount { get { return childErrorCount; } }
+    public int ChildWarningCount { get { return childWarningCount; } }
 
     public Visibility ErrorBoxVisibility
     {
       get
       {
-        return ErrorCount == 0? Visibility.Hidden : Visibility.Visible;
+        return ChildErrorCount == 0? Visibility.Hidden : Visibility.Visible;
       }
     }
 
@@ -38,36 +38,45 @@ namespace BambooLogViewer.ViewModel
     {
       get
       {
-        return WarningCount == 0 ? Visibility.Hidden : Visibility.Visible;
+        return ChildWarningCount == 0 ? Visibility.Hidden : Visibility.Visible;
       }
     }
+
+    public Visibility BulletVisibility
+    {
+      get
+      {
+        return model.Failed && ChildErrorCount == 0 ? Visibility.Visible : Visibility.Hidden;
+      }
+    }
+
+    public override int getWarningCount()
+    {
+      return childWarningCount;
+    }
+    public override int getErrorCount()
+    {
+      return model.Failed && childErrorCount == 0 ? 1 : childErrorCount;
+    }
+
 
     public override void Update()
     {
       records = model.Records.Select(x => createViewModel(x)).ToList();
 
-      errorCount = 0;
-      warningCount = 0;
+      childErrorCount = 0;
+      childWarningCount = 0;
       TimeSpan maxChildDuration = TimeSpan.Zero;
       foreach (var record in Records)
       {
         record.Update();
+        childErrorCount += record.getErrorCount();
+        childWarningCount += record.getWarningCount();
         var group = record as GroupRecord;
         if (group != null)
         {
-          errorCount += group.errorCount;
-          warningCount += group.warningCount;
           if (group.Duration > maxChildDuration)
             maxChildDuration = group.Duration;
-        }
-        else
-        {
-          var simple = record as SimpleRecord;
-          if (simple != null)
-            if (simple.Severity == Model.MessageSeverity.Error)
-            errorCount++;
-          if (simple.Severity == Model.MessageSeverity.Warning)
-            warningCount++;
         }
       }
       if (maxChildDuration != TimeSpan.Zero)

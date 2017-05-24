@@ -13,15 +13,19 @@
         </Grid>
         <Grid Visibility="{Binding ErrorBoxVisibility}">
           <Rectangle Fill="Red" Stroke="Black" StrokeThickness="1" Margin="0" RadiusX="3" RadiusY="3"/>
-          <TextBlock Foreground="White" Text="{Binding ErrorCount}" Margin="3,1,3,1"/>
+          <TextBlock Foreground="White" Text="{Binding ChildErrorCount}" Margin="3,1,3,1"/>
         </Grid>
         <Grid Visibility="{Binding WarningBoxVisibility}">
           <Rectangle Fill="Yellow" Stroke="Black" StrokeThickness="1" Margin="0" RadiusX="3" RadiusY="3"/>
-          <TextBlock Foreground="Black" Text="{Binding WarningCount}" Margin="3,1,3,1"/>
+          <TextBlock Foreground="Black" Text="{Binding ChildWarningCount}" Margin="3,1,3,1"/>
         </Grid>
+        <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" 
+               Fill="Red" 
+               Visibility="{Binding BulletVisibility}" 
+               Margin="0,0,5,0"/>
       </StackPanel>
     </ControlTemplate>
-    <ControlTemplate x:Key="recordTemplate">
+    <ControlTemplate x:Key="simpleRecordTemplate">
       <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" 
                Fill="{Binding BulletColor}" 
                Visibility="{Binding BulletVisibility}" 
@@ -128,7 +132,7 @@
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type viewModel:SimpleRecord}">
           <StackPanel Orientation="Horizontal">
-            <Control Template="{StaticResource recordTemplate}"></Control>
+            <Control Template="{StaticResource simpleRecordTemplate}"></Control>
             <TextBlock Text="{Binding Message}"/>
           </StackPanel>
         </DataTemplate>

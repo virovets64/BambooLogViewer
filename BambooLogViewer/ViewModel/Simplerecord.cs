@@ -40,6 +40,16 @@ namespace BambooLogViewer.ViewModel
         return Severity == Model.MessageSeverity.Normal ? Visibility.Hidden : Visibility.Visible;
       }
     }
+
+    public override int getWarningCount()
+    {
+      return Severity == Model.MessageSeverity.Warning? 1 : 0;
+    }
+    public override int getErrorCount()
+    {
+      return Severity == Model.MessageSeverity.Error ? 1 : 0;
+    }
+
   }
 
 }
