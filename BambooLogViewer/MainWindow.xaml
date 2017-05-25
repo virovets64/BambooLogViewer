@@ -79,7 +79,7 @@
             </StackPanel>
           </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type viewModel:PlanTask}" ItemsSource="{Binding Records}">
+        <HierarchicalDataTemplate DataType="{x:Type viewModel:Task}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
             <TextBlock Style="{StaticResource keyStyle}" Text="Task:" />

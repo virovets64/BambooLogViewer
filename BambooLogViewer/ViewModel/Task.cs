@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BambooLogViewer.ViewModel
 {
-  [Model.TargetType(typeof(Model.PlanTask))]
-  public class PlanTask: GroupRecord
+  [Model.TargetType(typeof(Model.Task))]
+  public class Task: GroupRecord
   {
-    public PlanTask(Model.PlanTask record): base(record)
+    public Task(Model.Task record): base(record)
     { }
-    private Model.PlanTask model { get { return (Model.PlanTask)modelRecord; } }
+    private Model.Task model { get { return (Model.Task)modelRecord; } }
 
     public string Name { get { return model.Name; } }
     public string Result { get { return model.Result; } }

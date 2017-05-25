@@ -65,7 +65,7 @@
     <Compile Include="ViewModel\GTest.cs" />
     <Compile Include="ViewModel\GTestCase.cs" />
     <Compile Include="ViewModel\GTestRun.cs" />
-    <Compile Include="ViewModel\PlanTask.cs" />
+    <Compile Include="ViewModel\Task.cs" />
     <Compile Include="ViewModel\Record.cs" />
     <Compile Include="ViewModel\SimpleRecord.cs" />
     <Compile Include="ViewModel\VSProject.cs" />
@@ -80,7 +80,7 @@
     <Compile Include="Model\BambooLog.cs" />
     <Compile Include="Model\Build.cs" />
     <Compile Include="Model\GroupRecord.cs" />
-    <Compile Include="Model\PlanTask.cs" />
+    <Compile Include="Model\Task.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\VSProject.cs" />
     <Compile Include="MainWindow.xaml.cs">

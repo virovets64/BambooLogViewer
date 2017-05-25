@@ -2,23 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using BambooLogViewer.Model;
-using System.Net;
 using System.Text.RegularExpressions;
 
 namespace BambooLogViewer.Parser
 {
   public class BambooLogParser
   {
-    public static string downloadFile(string url)
-    {
-      using (WebClient client = new WebClient())
-      {
-        return client.DownloadString(url);
-      }
-    }
-
     public static BambooLog Parse(string text)
     {
       return Parse(text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries));
@@ -129,7 +119,7 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        var task = new PlanTask();
+        var task = new Task();
         task.Time = row.Time;
         setMatchedProperties(task, match.Groups, regex.GetGroupNames());
         groupStack.Peek().Add(task);
@@ -143,7 +133,7 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        var task = groupStack.Peek() as PlanTask;
+        var task = groupStack.Peek() as Task;
         if (task.Name != match.Groups["Name"].Value)
           throw new Exception("Task name mismatch");
         task.FinishTime = row.Time;
@@ -158,7 +148,7 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        var task = groupStack.Peek() as PlanTask;
+        var task = groupStack.Peek() as Task;
         var project = new VSProject();
         project.Time = row.Time;
         setMatchedProperties(project, match.Groups, regex.GetGroupNames());
@@ -172,7 +162,7 @@ namespace BambooLogViewer.Parser
     {
       if(groupStack.Count == 0)
         return false;
-      var task = groupStack.Peek() as PlanTask;
+      var task = groupStack.Peek() as Task;
       if (task == null)
         return false;
 
@@ -210,7 +200,7 @@ namespace BambooLogViewer.Parser
       var match = regex.Match(row.Message);
       if (match.Success)
       {
-        var task = groupStack.Peek() as PlanTask;
+        var task = groupStack.Peek() as Task;
         var test = new GTestRun();
         test.Time = row.Time;
         setMatchedProperties(test, match.Groups, regex.GetGroupNames());

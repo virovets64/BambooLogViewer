@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BambooLogViewer.Model
 {
-  public class PlanTask : GroupRecord
+  public class Task : GroupRecord
   {
-    public PlanTask()
+    public Task()
     {
       VSProjects = new Dictionary<string, VSProject>();
     }
