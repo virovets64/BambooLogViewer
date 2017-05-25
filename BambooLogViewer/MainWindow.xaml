@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:viewModel="clr-namespace:BambooLogViewer.ViewModel"
         xmlns:model="clr-namespace:BambooLogViewer.Model"  
-        Title="Bamboo Log Viewer" Height="350" Width="525">
+        Title="Bamboo Log Viewer" Height="350" Width="525" Closing="Window_Closing">
   <Window.Resources>
     <ControlTemplate x:Key="groupRecordTemplate">
       <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
@@ -44,7 +44,7 @@
       <Setter Property="TextBox.Margin" Value="0,0,3,0"/>
     </Style>
   </Window.Resources>
-  <DockPanel>
+  <DockPanel Name="mainPanel" PreviewMouseWheel="mainPanel_PreviewMouseWheel">
     <DockPanel DockPanel.Dock="Top">
       <TabControl>
         <TabItem Header="From File">

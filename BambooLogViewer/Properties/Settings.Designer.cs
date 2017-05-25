@@ -34,5 +34,17 @@ namespace BambooLogViewer.Properties {
                 this["LastPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double ScaleFactor {
+            get {
+                return ((double)(this["ScaleFactor"]));
+            }
+            set {
+                this["ScaleFactor"] = value;
+            }
+        }
     }
 }
