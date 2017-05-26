@@ -46,7 +46,7 @@
   </Window.Resources>
   <DockPanel Name="mainPanel" PreviewMouseWheel="mainPanel_PreviewMouseWheel">
     <DockPanel DockPanel.Dock="Top">
-      <TabControl>
+      <TabControl Name="tcSource">
         <TabItem Header="From File">
           <DockPanel>
             <TextBlock Text="Log file path: " DockPanel.Dock="Left" Margin="4"/>

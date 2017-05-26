@@ -28,10 +28,12 @@ namespace BambooLogViewer
       InitializeComponent();
       editPath.Text = Properties.Settings.Default.LastPath;
       setScaleFactor(Properties.Settings.Default.ScaleFactor);
+      tcSource.SelectedIndex = Properties.Settings.Default.SourceTabIndex;
     }
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+      Properties.Settings.Default.SourceTabIndex = tcSource.SelectedIndex;
       Properties.Settings.Default.Save();
     }
 
