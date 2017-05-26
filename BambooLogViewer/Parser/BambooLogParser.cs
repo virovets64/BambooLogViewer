@@ -296,6 +296,7 @@ namespace BambooLogViewer.Parser
         var test = groupStack.Peek() as GTest;
         test.FinishTime = row.Time;
         test.Result = match.Groups["Result"].Value;
+        test.Milliseconds = match.Groups["Milliseconds"].Value;
         groupStack.Pop();
       }
       return match.Success;

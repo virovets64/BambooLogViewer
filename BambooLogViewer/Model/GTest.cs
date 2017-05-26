@@ -9,6 +9,7 @@ namespace BambooLogViewer.Model
   public class GTest: GroupRecord
   {
     public string Name { get; set; }
+    public string Milliseconds { get; set; }
     public string Result
     {
       get

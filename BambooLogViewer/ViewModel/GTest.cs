@@ -15,6 +15,7 @@ namespace BambooLogViewer.ViewModel
 
     public string Name { get { return model.Name; } }
     public string Result { get { return model.Result; } }
+    public string Milliseconds { get { return model.Milliseconds; } }
   }
 
 }

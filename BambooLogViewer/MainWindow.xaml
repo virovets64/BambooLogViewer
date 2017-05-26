@@ -100,10 +100,10 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTestRun}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="GTest:"/>
-            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding TestCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="GTest run:"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding TestCount}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="tests from"/>
-            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding CaseCount}"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding CaseCount}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="cases"/>
           </StackPanel>
         </HierarchicalDataTemplate>
@@ -117,8 +117,10 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTestCaseParametrized}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
+            <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="where"/>
-            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Parameter}"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Parameter}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTest}" ItemsSource="{Binding Records}">
@@ -128,6 +130,8 @@
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Result:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="ms:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Milliseconds}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type viewModel:SimpleRecord}">
