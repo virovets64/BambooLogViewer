@@ -58,6 +58,11 @@
     <Compile Include="Model\GTestRun.cs" />
     <Compile Include="Model\SimpleRecord.cs" />
     <Compile Include="Model\TypeMap.cs" />
+    <Compile Include="Parser\BuildMatcher.cs" />
+    <Compile Include="Parser\GTestMatcher.cs" />
+    <Compile Include="Parser\Matcher.cs" />
+    <Compile Include="Parser\TaskMatcher.cs" />
+    <Compile Include="Parser\VSProjectMatcher.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\BambooLog.cs" />
     <Compile Include="ViewModel\Build.cs" />
