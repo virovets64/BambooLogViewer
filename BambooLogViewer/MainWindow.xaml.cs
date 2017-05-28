@@ -13,7 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using BambooLogViewer.Model;
+using System.Windows.Controls.Primitives;
+using System.Threading;
 
 namespace BambooLogViewer
 {
@@ -40,7 +43,11 @@ namespace BambooLogViewer
     private void btnOpen_Click(object sender, RoutedEventArgs e)
     {
       Properties.Settings.Default.LastPath = editPath.Text;
-      var text = File.ReadAllText(editPath.Text);
+      string text;
+      using(new ProgressIndicator(this, "Reading the file..."))
+      {
+        text = File.ReadAllText(editPath.Text);
+      }
       initializeFromString(text);
       Properties.Settings.Default.Save();
     }
@@ -56,10 +63,13 @@ namespace BambooLogViewer
 
     private void initializeFromString(string text)
     {
-      var logFile = Parser.BambooLogParser.Parse(text);
-      var logFileView = new ViewModel.BambooLog(logFile);
-      trvLog.ItemsSource = logFileView.Records;
-      trvLog.Focus();
+      using (new ProgressIndicator(this, "Parsing the log..."))
+      {
+        var logFile = Parser.BambooLogParser.Parse(text);
+        var logFileView = new ViewModel.BambooLog(logFile);
+        trvLog.ItemsSource = logFileView.Records;
+        trvLog.Focus();
+      }
     }
 
     private double scaleFactor = 0;
@@ -99,6 +109,52 @@ namespace BambooLogViewer
         Properties.Settings.Default.ScaleFactor = scaleFactor;
         e.Handled = true;
       }
+    }
+
+    private void treeViewItem_Expanded(object sender, RoutedEventArgs e)
+    {
+      TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+      if (tvi != null)
+      {
+        if (tvi.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+        {
+          EventHandler itemsGenerated = null;
+          itemsGenerated = delegate(object s, EventArgs args)
+          {
+            if ((s as ItemContainerGenerator).Status == GeneratorStatus.ContainersGenerated)
+            {
+              (s as ItemContainerGenerator).StatusChanged -= itemsGenerated;
+              Dispatcher.BeginInvoke(new Action(() => Mouse.OverrideCursor = null), DispatcherPriority.ContextIdle, null);
+            }
+          };
+          tvi.ItemContainerGenerator.StatusChanged += itemsGenerated;
+          Mouse.OverrideCursor = Cursors.Wait;
+        }
+      }
+    }
+
+    public class ProgressIndicator : IDisposable
+    {
+      MainWindow mainWindow;
+      public ProgressIndicator(MainWindow window, string text)
+      {
+        mainWindow = window;
+        Mouse.OverrideCursor = Cursors.Wait;
+        mainWindow.progressText.Text = text;
+        refreshStatusBar();
+      }
+
+      public void Dispose()
+      {
+        Mouse.OverrideCursor = null;
+        mainWindow.progressText.Text = "Ready";
+        refreshStatusBar();
+      }
+      private void refreshStatusBar()
+      {
+        mainWindow.statusBar.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+      }
+      private static Action EmptyDelegate = delegate() { };
     }
   }
 }
