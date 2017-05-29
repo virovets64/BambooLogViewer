@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BambooLogViewer.Model
 {
-  public class GTestCase: GroupRecord
+  public class GTestCase : GTestBase
   {
-    public string Name { get; set; }
   }
 
   public class GTestCaseParametrized : GTestCase

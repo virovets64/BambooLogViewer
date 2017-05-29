@@ -39,7 +39,7 @@ namespace BambooLogViewer.Parser
       if (match.Success)
       {
         var test = parser.Stack.Peek() as GTestRun;
-        test.FinishTime = row.Time;
+        test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
       return match.Success;
@@ -65,7 +65,7 @@ namespace BambooLogViewer.Parser
       if (match.Success)
       {
         var test = parser.Stack.Peek() as GTestCase;
-        test.FinishTime = row.Time;
+        test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
       return match.Success;
@@ -91,7 +91,7 @@ namespace BambooLogViewer.Parser
       if (match.Success)
       {
         var test = parser.Stack.Peek() as GTestCaseParametrized;
-        test.FinishTime = row.Time;
+        test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
       return match.Success;
@@ -117,7 +117,6 @@ namespace BambooLogViewer.Parser
       if (match.Success)
       {
         var test = parser.Stack.Peek() as GTest;
-        test.FinishTime = row.Time;
         test.Result = match.Groups["Result"].Value;
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();

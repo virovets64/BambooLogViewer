@@ -17,23 +17,27 @@ namespace BambooLogViewer.Model
       }
     }
     public bool Failed { get; set; }
-    public TimeSpan Duration { get; set; }
-    
-    public DateTime FinishTime 
-    { 
-      get
-      {
-        return Time + Duration;
-      }
-      set
-      {
-        Duration = value - Time;
-      }
-    }
 
     public void Add(Record record)
     {
       Records.Add(record);
+    }
+
+    public override void fixFinishTime(DateTime time)
+    {
+      base.fixFinishTime(time);
+      
+      if(records != null)
+      {
+        Record previous = null;
+        foreach (var record in Records)
+        {
+          if (previous != null)
+            previous.fixFinishTime(record.Time);
+          previous = record;
+        }
+        previous.fixFinishTime(time);
+      }
     }
 
     private List<Record> records;

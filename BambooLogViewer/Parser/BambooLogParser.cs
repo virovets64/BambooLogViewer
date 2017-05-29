@@ -39,7 +39,7 @@ namespace BambooLogViewer.Parser
     private void run(IEnumerable<string> lines)
     {
       var tabDelimiter = new char[] { '\t' };
-
+      DateTime? lastRecordTime = null;
       foreach (string line in lines)
       {
         if (line.Trim() == "")
@@ -48,6 +48,7 @@ namespace BambooLogViewer.Parser
         if(columns[2].Trim() == "")
           continue;
         var row = new Row { Kind = columns[0], Time = DateTime.Parse(columns[1]), Message = columns[2] };
+        lastRecordTime = row.Time;
 
         bool matched = matchers.Any(x => x.Match(this, row));
         if (matched)
@@ -62,6 +63,8 @@ namespace BambooLogViewer.Parser
           groupStack.Peek().Add(record);
         }
       }
+      if(lastRecordTime.HasValue)
+        log.fixFinishTime(lastRecordTime.Value);
     }
   }
 }

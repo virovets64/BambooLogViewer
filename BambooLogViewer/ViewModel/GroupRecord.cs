@@ -18,10 +18,7 @@ namespace BambooLogViewer.ViewModel
     private Model.GroupRecord model { get { return (Model.GroupRecord)modelRecord;  } }
     protected int childErrorCount = 0;
     protected int childWarningCount = 0;
-    private double relativeDiration = 0;
 
-    public TimeSpan Duration { get { return model.Duration; } }
-    public double RelativeDuration { get { return relativeDiration; } set { } }
     public int ChildErrorCount { get { return childErrorCount; } }
     public int ChildWarningCount { get { return childWarningCount; } }
 
@@ -74,20 +71,14 @@ namespace BambooLogViewer.ViewModel
         record.Update(context);
         childErrorCount += record.getErrorCount();
         childWarningCount += record.getWarningCount();
-        var group = record as GroupRecord;
-        if (group != null)
-        {
-          if (group.Duration > maxChildDuration)
-            maxChildDuration = group.Duration;
-        }
+        if (record.Duration > maxChildDuration)
+          maxChildDuration = record.Duration;
       }
       if (maxChildDuration != TimeSpan.Zero)
       {
         foreach (var record in Records)
         {
-          var group = record as GroupRecord;
-          if (group != null)
-            group.relativeDiration = (double)group.Duration.Ticks / maxChildDuration.Ticks;
+          record.RelativeDuration = (double)record.Duration.Ticks / maxChildDuration.Ticks;
         }
       }
       if (!firstErrorFound && childErrorCount > 0)

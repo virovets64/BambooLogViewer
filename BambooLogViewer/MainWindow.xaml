@@ -9,7 +9,7 @@
       <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
         <Grid Name="duration">
           <ProgressBar Minimum="0" Maximum="1" Value="{Binding RelativeDuration}"/>
-          <TextBlock Foreground="Black" Margin="3,1,3,1" Text="{Binding Duration}"/>
+          <TextBlock Foreground="Black" Margin="3,1,3,1" Text="{Binding Duration, StringFormat={}{0:hh}:{0:mm}:{0:ss}.{0:fff}}"/>
         </Grid>
         <Grid Visibility="{Binding ErrorBoxVisibility}">
           <Rectangle Fill="Red" Stroke="Black" StrokeThickness="1" Margin="0" RadiusX="3" RadiusY="3"/>
@@ -24,12 +24,6 @@
                Visibility="{Binding BulletVisibility}" 
                Margin="0,0,5,0"/>
       </StackPanel>
-    </ControlTemplate>
-    <ControlTemplate x:Key="simpleRecordTemplate">
-      <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" 
-               Fill="{Binding BulletColor}" 
-               Visibility="{Binding BulletVisibility}" 
-               Margin="0,0,5,0"/>
     </ControlTemplate>
     <Style x:Key="keyStyle">
       <Setter Property="TextBox.Margin" Value="0,0,3,0"/>
@@ -135,13 +129,18 @@
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Result:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
-            <TextBlock Style="{StaticResource keyStyle}" Text="ms:"/>
-            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Milliseconds}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <DataTemplate DataType="{x:Type viewModel:SimpleRecord}">
           <StackPanel Orientation="Horizontal">
-            <Control Template="{StaticResource simpleRecordTemplate}"></Control>
+            <Grid Name="duration">
+              <ProgressBar Minimum="0" Maximum="1" Value="{Binding RelativeDuration}"/>
+              <TextBlock Foreground="Black" Margin="3,1,3,1" Text="{Binding Duration, StringFormat={}{0:hh}:{0:mm}:{0:ss}.{0:fff}}"/>
+            </Grid>
+            <Ellipse Name="ellipse" Width="12" Height="12" Stroke="Black" 
+               Fill="{Binding BulletColor}" 
+               Visibility="{Binding BulletVisibility}" 
+               Margin="0,0,5,0"/>
             <TextBlock Text="{Binding Message}"/>
           </StackPanel>
         </DataTemplate>

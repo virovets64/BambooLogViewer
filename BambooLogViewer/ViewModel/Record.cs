@@ -16,6 +16,9 @@ namespace BambooLogViewer.ViewModel
     public string Kind { get { return modelRecord.Kind; } }
     public DateTime Time { get { return modelRecord.Time; } }
     public string Message { get { return modelRecord.Message; } }
+    public TimeSpan Duration { get { return modelRecord.Duration; } }
+
+    public double RelativeDuration { get; set; }
 
     public virtual void Update(BambooLog.Context context)
     { }
