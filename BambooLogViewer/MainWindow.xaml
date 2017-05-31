@@ -25,17 +25,22 @@
                Margin="0,0,5,0"/>
       </StackPanel>
     </ControlTemplate>
-    <Style x:Key="keyStyle">
+    <Style x:Key="textStyle">
       <Setter Property="TextBox.Margin" Value="0,0,3,0"/>
     </Style>
-    <Style x:Key="valueStyle">
+    <Style x:Key="kindStyle" BasedOn="{StaticResource textStyle}">
+      <Setter Property="TextBox.TextDecorations" Value="Underline"/>
       <Setter Property="TextBox.FontWeight" Value="Bold"/>
-      <Setter Property="TextBox.Margin" Value="0,0,3,0"/>
+      <Setter Property="TextBox.Foreground" Value="#FF4D7597"/>
     </Style>
-    <Style x:Key="mainValueStyle">
+    <Style x:Key="keyStyle" BasedOn="{StaticResource textStyle}">
+    </Style>
+    <Style x:Key="valueStyle" BasedOn="{StaticResource textStyle}">
+      <Setter Property="TextBox.FontWeight" Value="Bold"/>
+    </Style>
+    <Style x:Key="mainValueStyle" BasedOn="{StaticResource textStyle}">
       <Setter Property="TextBox.FontWeight" Value="Bold"/>
       <Setter Property="TextBox.Foreground" Value="Blue"/>
-      <Setter Property="TextBox.Margin" Value="0,0,3,0"/>
     </Style>
   </Window.Resources>
   <DockPanel Name="mainPanel" PreviewMouseWheel="mainPanel_PreviewMouseWheel">
@@ -68,7 +73,7 @@
           <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
               <Control Template="{StaticResource groupRecordTemplate}"></Control>
-              <TextBlock Style="{StaticResource keyStyle}" Text="Build: " />
+              <TextBlock Style="{StaticResource kindStyle}" Text="Build" />
               <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Id}"/>
               <TextBlock Style="{StaticResource keyStyle}" Text="on" />
               <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Agent}"/>
@@ -81,16 +86,30 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:Task}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="Task:" />
+            <TextBlock Style="{StaticResource kindStyle}" Text="Task" />
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text=" Result:" />
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type viewModel:VSBuild}" ItemsSource="{Binding Records}">
+          <StackPanel Orientation="Horizontal">
+            <Control Template="{StaticResource groupRecordTemplate}"></Control>
+            <TextBlock Style="{StaticResource kindStyle}" Text="VS Build"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Target:"/>
+            <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Target}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Succeeded:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding SucceededCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Failed:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding FailedCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Skipped:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding SkippedCount}"/>
+          </StackPanel>
+        </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type viewModel:VSProject}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="Project:"/>
+            <TextBlock Style="{StaticResource kindStyle}" Text="Project"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Config:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Configuration}"/>
@@ -99,7 +118,7 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTestRun}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="GTest run:"/>
+            <TextBlock Style="{StaticResource kindStyle}" Text="GTest run"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding TestCount}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="tests from"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding CaseCount}"/>
@@ -109,14 +128,14 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTestCase}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
+            <TextBlock Style="{StaticResource kindStyle}" Text="TestCase"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTestCaseParametrized}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="TestCase:"/>
+            <TextBlock Style="{StaticResource kindStyle}" Text="TestCase"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="where"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Parameter}"/>
@@ -125,7 +144,7 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:GTest}" ItemsSource="{Binding Records}">
           <StackPanel Orientation="Horizontal">
             <Control Template="{StaticResource groupRecordTemplate}"></Control>
-            <TextBlock Style="{StaticResource keyStyle}" Text="Test:"/>
+            <TextBlock Style="{StaticResource kindStyle}" Text="Test"/>
             <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Result:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Result}"/>

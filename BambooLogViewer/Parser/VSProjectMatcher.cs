@@ -10,33 +10,46 @@ namespace BambooLogViewer.Parser
   public class VSProjectMatcher : Matcher
   {
     private static Regex regexVSProjectStarted = new Regex(@"^(?<Number>\d+)\>-+ (?<Target>Build|Rebuild All) started: Project: (?<Name>[a-zA-Z0-9_.]+), Configuration: (?<Configuration>.+) -+$");
-    private static Regex regexProjectNumber = new Regex(@"^(?<Number>\d+)\>(?<Message>.*)$");
+    private static Regex regexVSBuildFinished = new Regex(@"^========== (?<Target>Build|Rebuild All): (?<SucceededCount>\d+) succeeded, (?<FailedCount>\d+) failed, (?<SkippedCount>\d+) skipped ==========$");
+    private static Regex regexBuildMessage = new Regex(@"^(?<Number>\d+)\>(?<Message>.*)$");
     private static Regex regexError = new Regex(@"^.+: (?<Severity>warning|error|fatal error) (\w+):");
 
+    VSBuild getCurrentBuild(BambooLogParser parser)
+    {
+      if (parser.Stack.Count == 0)
+        return null;
+      return parser.Stack.Peek() as VSBuild;
+    }
+    
     bool matchProjectStarted(BambooLogParser parser, Row row)
     {
       var match = regexVSProjectStarted.Match(row.Message);
       if (match.Success)
       {
-        var task = parser.Stack.Peek() as Task;
+        var build = getCurrentBuild(parser);
+        if (build == null)
+        {
+          build = new VSBuild();
+          parser.Stack.Peek().Add(build);
+          parser.Stack.Push(build);
+        }
+
         var project = new VSProject();
         project.Time = row.Time;
         setMatchedProperties(project, match.Groups, regexVSProjectStarted.GetGroupNames());
-        task.VSProjects.Add(project.Number, project);
-        task.Add(project);
+        build.Projects.Add(project.Number, project);
+        build.Add(project);
       }
       return match.Success;
     }
 
     bool matchProjectRecord(BambooLogParser parser, Row row)
     {
-      if (parser.Stack.Count == 0)
-        return false;
-      var task = parser.Stack.Peek() as Task;
-      if (task == null)
+      var build = getCurrentBuild(parser);
+      if (build == null)
         return false;
 
-      var match = regexProjectNumber.Match(row.Message);
+      var match = regexBuildMessage.Match(row.Message);
       if (match.Success)
       {
         var record = new SimpleRecord();
@@ -44,7 +57,7 @@ namespace BambooLogViewer.Parser
         record.Time = row.Time;
         record.Message = match.Groups["Message"].Value;
         var projectNumber = match.Groups["Number"].Value;
-        var project = task.VSProjects[projectNumber];
+        var project = build.Projects[projectNumber];
         var errorMatch = regexError.Match(record.Message);
         if (errorMatch.Success)
         {
@@ -65,9 +78,26 @@ namespace BambooLogViewer.Parser
       return match.Success;
     }
 
+    bool matchBuildFinished(BambooLogParser parser, Row row)
+    {
+      var build = getCurrentBuild(parser);
+      if (build == null)
+        return false;
+      var match = regexVSBuildFinished.Match(row.Message);
+      if (match.Success)
+      {
+        setMatchedProperties(build, match.Groups, regexVSBuildFinished.GetGroupNames());
+        parser.Stack.Pop();
+      }
+      return match.Success;
+    }
+
     public override bool Match(BambooLogParser parser, Row row)
     {
-      return matchProjectStarted(parser, row) || matchProjectRecord(parser, row);
+      return 
+        matchProjectStarted(parser, row) || 
+        matchProjectRecord(parser, row) ||
+        matchBuildFinished(parser, row);
     }
   }
 }

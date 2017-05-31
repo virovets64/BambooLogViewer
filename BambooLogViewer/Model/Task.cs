@@ -7,11 +7,6 @@ namespace BambooLogViewer.Model
 {
   public class Task : GroupRecord
   {
-    public Task()
-    {
-      VSProjects = new Dictionary<string, VSProject>();
-    }
-
     public string Name { get; set; }
     public string Result
     {
@@ -24,6 +19,5 @@ namespace BambooLogViewer.Model
         Failed = value.Trim().ToLower() != "success";
       }
     }
-    public Dictionary<string, VSProject> VSProjects { get; set; }
   }
 }

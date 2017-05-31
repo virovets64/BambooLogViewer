@@ -58,6 +58,7 @@
     <Compile Include="Model\GTestRun.cs" />
     <Compile Include="Model\SimpleRecord.cs" />
     <Compile Include="Model\TypeMap.cs" />
+    <Compile Include="Model\VSBuild.cs" />
     <Compile Include="Parser\BuildMatcher.cs" />
     <Compile Include="Parser\GTestMatcher.cs" />
     <Compile Include="Parser\Matcher.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="ViewModel\Task.cs" />
     <Compile Include="ViewModel\Record.cs" />
     <Compile Include="ViewModel\SimpleRecord.cs" />
+    <Compile Include="ViewModel\VSBuild.cs" />
     <Compile Include="ViewModel\VSProject.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
