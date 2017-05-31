@@ -52,6 +52,9 @@
             <Button Name="btnOpen" DockPanel.Dock="Right" Margin="4" Click="btnOpen_Click">
               <TextBlock Text="Open"/>
             </Button>
+            <Button Name="btnBrowse" DockPanel.Dock="Right" Margin="4" Click="btnBrowse_Click">
+              <TextBlock Text=" ... "/>
+            </Button>
             <TextBox Name="editPath" Margin="4"/>
           </DockPanel>
         </TabItem>

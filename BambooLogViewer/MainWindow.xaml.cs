@@ -12,11 +12,12 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+//using System.Windows.Shapes;
 using System.Windows.Threading;
 using BambooLogViewer.Model;
 using System.Windows.Controls.Primitives;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace BambooLogViewer
 {
@@ -155,6 +156,20 @@ namespace BambooLogViewer
         mainWindow.statusBar.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
       }
       private static Action EmptyDelegate = delegate() { };
+    }
+
+    private void btnBrowse_Click(object sender, RoutedEventArgs e)
+    {
+      OpenFileDialog openFileDialog = new OpenFileDialog();
+      var path = editPath.Text;
+      if(!String.IsNullOrEmpty(path))
+      {
+        var dir = Path.GetDirectoryName(path);
+        if(Directory.Exists(dir))
+          openFileDialog.InitialDirectory = dir;
+      }
+      if (openFileDialog.ShowDialog() == true)
+        editPath.Text = openFileDialog.FileName;
     }
   }
 }
