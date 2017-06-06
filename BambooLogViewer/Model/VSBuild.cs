@@ -11,6 +11,7 @@ namespace BambooLogViewer.Model
     public string SucceededCount { get; set; }
     public string FailedCount { get; set; }
     public string SkippedCount { get; set; }
+    public string UpToDateCount { get; set; }
 
     public Dictionary<string, VSProject> Projects { get {  return projects; } }
 

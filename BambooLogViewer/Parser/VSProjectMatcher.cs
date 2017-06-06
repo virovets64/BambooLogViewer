@@ -10,7 +10,8 @@ namespace BambooLogViewer.Parser
   public class VSProjectMatcher : Matcher
   {
     private static Regex regexVSProjectStarted = new Regex(@"^(?<Number>\d+)\>-+ (?<Target>Build|Rebuild All) started: Project: (?<Name>[a-zA-Z0-9_.]+), Configuration: (?<Configuration>.+) -+$");
-    private static Regex regexVSBuildFinished = new Regex(@"^========== (?<Target>Build|Rebuild All): (?<SucceededCount>\d+) succeeded, (?<FailedCount>\d+) failed, (?<SkippedCount>\d+) skipped ==========$");
+    private static Regex regexVSBuildFinished = new Regex(@"^========== (?<Target>Build|Rebuild All): (?<Counters>.*) ==========$");
+    private static Regex regexCounter = new Regex(@"^(?<Value>\d+) (?<Name>.*)$");
     private static Regex regexBuildMessage = new Regex(@"^(?<Number>\d+)\>(?<Message>.*)$");
     private static Regex regexError = new Regex(@"^.+: (?<Severity>warning|error|fatal error) (\w+):");
 
@@ -86,7 +87,30 @@ namespace BambooLogViewer.Parser
       var match = regexVSBuildFinished.Match(row.Message);
       if (match.Success)
       {
-        setMatchedProperties(build, match.Groups, regexVSBuildFinished.GetGroupNames());
+        var counters = match.Groups["Counters"].Value.Split(new string[] { ", " }, StringSplitOptions.None);
+        foreach(var counter in counters)
+        {
+          var counterMatch = regexCounter.Match(counter);
+          if(counterMatch.Success)
+          {
+            string value = counterMatch.Groups["Value"].Value;
+            switch(counterMatch.Groups["Name"].Value)
+            {
+              case "succeeded":
+                build.SucceededCount = value;
+                break;
+              case "failed":
+                build.FailedCount = value;
+                break;
+              case "skipped":
+                build.SkippedCount = value;
+                break;
+              case "up-to-date":
+                build.UpToDateCount = value;
+                break;
+            }
+          }
+        }
         parser.Stack.Pop();
       }
       return match.Success;

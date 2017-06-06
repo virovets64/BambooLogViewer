@@ -107,6 +107,8 @@
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding FailedCount}"/>
             <TextBlock Style="{StaticResource keyStyle}" Text="Skipped:"/>
             <TextBlock Style="{StaticResource valueStyle}" Text="{Binding SkippedCount}"/>
+            <TextBlock Style="{StaticResource keyStyle}" Text="Up-to-date:"/>
+            <TextBlock Style="{StaticResource valueStyle}" Text="{Binding UpToDateCount}"/>
           </StackPanel>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type viewModel:VSProject}" ItemsSource="{Binding Records}">

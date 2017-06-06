@@ -17,6 +17,7 @@ namespace BambooLogViewer.ViewModel
     public string SucceededCount { get { return model.SucceededCount; } }
     public string FailedCount { get { return model.FailedCount; } }
     public string SkippedCount { get { return model.SkippedCount; } }
+    public string UpToDateCount { get { return model.UpToDateCount; } }
   }
 
 }
