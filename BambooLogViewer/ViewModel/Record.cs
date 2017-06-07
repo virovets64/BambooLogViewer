@@ -20,6 +20,9 @@ namespace BambooLogViewer.ViewModel
 
     public double RelativeDuration { get; set; }
 
+    public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
+    private bool isSelected = false;
+
     public virtual void Update(BambooLog.Context context)
     { }
 

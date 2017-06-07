@@ -41,9 +41,6 @@ namespace BambooLogViewer.ViewModel
       }
     }
 
-    public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
-    private bool isSelected = false;
-    
     public override int getWarningCount()
     {
       return Severity == Model.MessageSeverity.Warning? 1 : 0;

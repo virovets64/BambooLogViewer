@@ -81,9 +81,15 @@ namespace BambooLogViewer.ViewModel
           record.RelativeDuration = (double)record.Duration.Ticks / maxChildDuration.Ticks;
         }
       }
-      if (!firstErrorFound && childErrorCount > 0)
+      if (!firstErrorFound)
       {
-        IsExpanded = true;
+        if(childErrorCount > 0)
+          IsExpanded = true;
+        else if (model.Failed)
+        {
+          context.FirstErrorFound = true;
+          IsSelected = true;
+        }
       }
     }
 
