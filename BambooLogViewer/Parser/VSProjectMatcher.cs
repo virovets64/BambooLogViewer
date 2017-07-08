@@ -31,6 +31,7 @@ namespace BambooLogViewer.Parser
         if (build == null)
         {
           build = new VSBuild();
+          build.Time = row.Time;
           parser.Stack.Peek().Add(build);
           parser.Stack.Push(build);
         }
