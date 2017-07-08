@@ -10,7 +10,7 @@ namespace BambooLogViewer.Parser
 {
   public class BuildMatcher: Matcher
   {
-    private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
+    private static Regex regexBuildStarted = new Regex(@"^Build (?<Name>.+) - Build #(?<Number>[0-9]+) \((?<Id>.+)\) started building on agent (?<Agent>.+)$");
     private static Regex regexBuildFinished = new Regex(@"^Finished building (?<Id>.+)\.$");
 
     bool matchBuildStarted(BambooLogParser parser, Row row)

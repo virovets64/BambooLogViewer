@@ -78,11 +78,16 @@
               <Control Template="{StaticResource groupRecordTemplate}"></Control>
               <TextBlock Style="{StaticResource kindStyle}" Text="Build" />
               <TextBlock Style="{StaticResource mainValueStyle}" Text="{Binding Id}"/>
-              <TextBlock Style="{StaticResource keyStyle}" Text="on" />
+              <TextBlock Style="{StaticResource keyStyle}" Text="Start time:" />
+              <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Time, StringFormat={}{0:yyyy}-{0:MM}-{0:dd} {0:hh}:{0:mm}:{0:ss}}"/>
+              <TextBlock Style="{StaticResource keyStyle}" Text="Agent:" />
               <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Agent}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding Name}" />
+              <TextBlock Style="{StaticResource keyStyle}" Text="Full Name:" />
+              <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Name}" />
+              <TextBlock Style="{StaticResource keyStyle}" Text="Build Number:" />
+              <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Number}" />
             </StackPanel>
           </StackPanel>
         </HierarchicalDataTemplate>
