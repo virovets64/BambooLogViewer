@@ -86,6 +86,8 @@
             <StackPanel Orientation="Horizontal">
               <TextBlock Style="{StaticResource keyStyle}" Text="Full Name:" />
               <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Name}" />
+              <TextBlock Style="{StaticResource keyStyle}" Text="Job:" />
+              <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Job}" />
               <TextBlock Style="{StaticResource keyStyle}" Text="Build Number:" />
               <TextBlock Style="{StaticResource valueStyle}" Text="{Binding Number}" />
             </StackPanel>

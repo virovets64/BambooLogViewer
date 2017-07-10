@@ -18,5 +18,6 @@ namespace BambooLogViewer.ViewModel
     public string Name { get { return model.Name; } }
     public string Number { get { return model.Number; } }
     public string Agent { get { return model.Agent; } }
+    public string Job { get { return model.Job; } }
   }
 }

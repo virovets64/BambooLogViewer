@@ -11,5 +11,6 @@ namespace BambooLogViewer.Model
     public string Name { get; set; }
     public string Number { get; set; }
     public string Agent { get; set; }
+    public string Job { get; set; }
   }
 }
