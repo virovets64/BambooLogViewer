@@ -38,7 +38,7 @@ namespace BambooLogViewer.Parser
         {
           parser.Stack.Pop().FinishTime = row.Time;
         }
-        var build = parser.Stack.Peek() as Build;
+        var build = (Build)parser.Stack.Peek();
         if (build.Id != match.Groups["Id"].Value)
           throw new Exception("Build id mismatch");
         build.FinishTime = row.Time;

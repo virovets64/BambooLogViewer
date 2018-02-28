@@ -19,7 +19,7 @@ namespace BambooLogViewer.Parser
     {
       if (parser.Stack.Count == 0)
         return null;
-      return parser.Stack.Peek() as VSBuild;
+      return (VSBuild)parser.Stack.Peek();
     }
     
     bool matchProjectStarted(BambooLogParser parser, Row row)

@@ -11,7 +11,7 @@ namespace BambooLogViewer.Parser
   {
     public static BambooLog Parse(string text)
     {
-      return Parse(text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries));
+      return Parse(text.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.None));
     }
 
     public static BambooLog Parse(IEnumerable<string> lines)
@@ -40,30 +40,47 @@ namespace BambooLogViewer.Parser
     {
       var tabDelimiter = new char[] { '\t' };
       DateTime? lastRecordTime = null;
-      foreach (string line in lines)
+      int lineNumber = 0;
+      try
       {
-        if (line.Trim() == "")
-          continue;
-        var columns = line.Split(tabDelimiter, 3);
-        if(columns[2].Trim() == "")
-          continue;
-        var row = new Row { Kind = columns[0], Time = DateTime.Parse(columns[1]), Message = columns[2] };
-        lastRecordTime = row.Time;
-
-        bool matched = matchers.Any(x => x.Match(this, row));
-        if (matched)
-          continue;
-
-        if(groupStack.Count != 0)
+        foreach (string line in lines)
         {
-          var record = new SimpleRecord();
-          record.Kind = row.Kind;
-          record.Time = row.Time;
-          record.Message = row.Message;
-          groupStack.Peek().Add(record);
+          lineNumber++;
+          if (line.Trim() == "")
+            continue;
+          var columns = line.Split(tabDelimiter, 3);
+          if (columns.Length != 3)
+            throw new Exception("3 tab-separated fields are expected");
+
+          if (columns[2].Trim() == "")
+            continue;
+          DateTime time;
+          if (!DateTime.TryParse(columns[1], out time))
+            throw new Exception("DateTime format is invalid");
+
+          var row = new Row { Kind = columns[0], Time = time, Message = columns[2] };
+          lastRecordTime = row.Time;
+
+          bool matched = matchers.Any(x => x.Match(this, row));
+          if (matched)
+            continue;
+
+          if (groupStack.Count != 0)
+          {
+            var record = new SimpleRecord();
+            record.Kind = row.Kind;
+            record.Time = row.Time;
+            record.Message = row.Message;
+            groupStack.Peek().Add(record);
+          }
         }
       }
-      if(lastRecordTime.HasValue)
+      catch (Exception e)
+      {
+        throw new Exception(String.Format("Parsing error at line {0}: {1}", lineNumber, e.Message));
+      }
+
+      if (lastRecordTime.HasValue)
         log.fixFinishTime(lastRecordTime.Value);
     }
   }

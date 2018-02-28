@@ -9,7 +9,7 @@ namespace BambooLogViewer.Parser
 {
   public class GTestMatcher : Matcher
   {
-    private static Regex regexGTestRunStarted = new Regex(@"\[==========\] Running (?<TestCount>\d+) test[s|] from (?<CaseCount>\d+) test cases?.$");
+    private static Regex regexGTestRunStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) test[s|] from (?<CaseCount>\d+) test cases?.$");
     private static Regex regexGTestRunFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests? from (?<CaseCount>\d+) test cases? ran. \((?<Milliseconds>\d+) ms total\)$");
     private static Regex regexGTestCaseStarted = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*)$");
     private static Regex regexGTestCaseFinished = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*) \((?<Milliseconds>\d+) ms total\)$");
@@ -23,7 +23,7 @@ namespace BambooLogViewer.Parser
       var match = regexGTestRunStarted.Match(row.Message);
       if (match.Success)
       {
-        var task = parser.Stack.Peek() as Task;
+        var task = (Task)parser.Stack.Peek();
         var test = new GTestRun();
         test.Time = row.Time;
         setMatchedProperties(test, match.Groups, regexGTestRunStarted.GetGroupNames());
@@ -38,7 +38,9 @@ namespace BambooLogViewer.Parser
       var match = regexGTestRunFinished.Match(row.Message);
       if (match.Success)
       {
-        var test = parser.Stack.Peek() as GTestRun;
+        var test = (GTestRun)parser.Stack.Peek();
+        if (test == null)
+          throw new Exception("GTestRun was not found");
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
@@ -64,7 +66,7 @@ namespace BambooLogViewer.Parser
       var match = regexGTestCaseFinished.Match(row.Message);
       if (match.Success)
       {
-        var test = parser.Stack.Peek() as GTestCase;
+        var test = (GTestCase)parser.Stack.Peek();
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
@@ -90,7 +92,7 @@ namespace BambooLogViewer.Parser
       var match = regexGTestParamFinished.Match(row.Message);
       if (match.Success)
       {
-        var test = parser.Stack.Peek() as GTestCaseParametrized;
+        var test = (GTestCaseParametrized)parser.Stack.Peek();
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
@@ -116,7 +118,7 @@ namespace BambooLogViewer.Parser
       var match = regexGTestFinished.Match(row.Message);
       if (match.Success)
       {
-        var test = parser.Stack.Peek() as GTest;
+        var test = (GTest)parser.Stack.Peek();
         test.Result = match.Groups["Result"].Value;
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();

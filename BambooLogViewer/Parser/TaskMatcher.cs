@@ -31,7 +31,7 @@ namespace BambooLogViewer.Parser
       var match = regexTaskFinished.Match(row.Message);
       if (match.Success)
       {
-        var task = parser.Stack.Peek() as Task;
+        var task = (Task)parser.Stack.Peek();
         if (task.Name != match.Groups["Name"].Value)
           throw new Exception("Task name mismatch");
         task.FinishTime = row.Time;
