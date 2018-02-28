@@ -9,7 +9,7 @@ namespace BambooLogViewer.Parser
 {
   public class GTestMatcher : Matcher
   {
-    private static Regex regexGTestRunStarted = new Regex(@"^\[==========\] Running (?<TestCount>\d+) test[s|] from (?<CaseCount>\d+) test cases?.$");
+    private static Regex regexGTestRunStarted = new Regex(@"\[==========\] Running (?<TestCount>\d+) test[s|] from (?<CaseCount>\d+) test cases?.$");
     private static Regex regexGTestRunFinished = new Regex(@"^\[==========\] (?<TestCount>\d+) tests? from (?<CaseCount>\d+) test cases? ran. \((?<Milliseconds>\d+) ms total\)$");
     private static Regex regexGTestCaseStarted = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*)$");
     private static Regex regexGTestCaseFinished = new Regex(@"^\[----------\] (?<TestCount>\d+) tests? from (?<Name>_\w+|[\w-[0-9_]]\w*) \((?<Milliseconds>\d+) ms total\)$");
@@ -39,8 +39,6 @@ namespace BambooLogViewer.Parser
       if (match.Success)
       {
         var test = (GTestRun)parser.Stack.Peek();
-        if (test == null)
-          throw new Exception("GTestRun was not found");
         test.Milliseconds = match.Groups["Milliseconds"].Value;
         parser.Stack.Pop();
       }
